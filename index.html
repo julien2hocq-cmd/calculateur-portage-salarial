@@ -6,385 +6,391 @@
 <title>Portage salarial — Julien HOCQ</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;background:#f5f5f4;color:#1c1c1e}
-.app{max-width:800px;margin:0 auto;padding:1rem}
-h1{font-size:20px;font-weight:600;margin-bottom:2px}
-.sub{color:#6b6b6b;font-size:13px;margin-bottom:1.25rem}
+body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;background:#f5f5f4;color:#1c1c1e;min-height:100vh}
+.app{max-width:820px;margin:0 auto;padding:1rem}
+.header{margin-bottom:1.25rem}
+.header h1{font-size:20px;font-weight:600;margin-bottom:2px}
+.header p{color:#6b6b6b;font-size:13px}
 .tabs{display:flex;border:1px solid #d1d0ce;border-radius:10px;overflow:hidden;margin-bottom:1.25rem;background:#fff}
 .tab{flex:1;padding:10px 4px;text-align:center;font-size:13px;cursor:pointer;background:#fff;color:#6b6b6b;border:none;font-family:inherit;transition:all .15s}
 .tab.active{background:#f0f0ee;color:#1c1c1e;font-weight:600}
 .pane{display:none}.pane.active{display:block}
 .card{background:#fff;border:1px solid #e0dedd;border-radius:12px;padding:1rem 1.25rem;margin-bottom:10px}
+.card.green{background:#f0f7f2;border-color:#c3e0ce}
+.card.blue{background:#e8f0fe;border-color:#b3cdf5}
+.card.orange{background:#fff8f0;border-color:#f5d5b0}
+.card.red{background:#fff0f0;border-color:#f5b3b3}
+.card.yellow{background:#fffbe6;border-color:#f0e0a0}
 .stitle{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8e8e93;margin-bottom:10px;font-weight:600}
 .row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f0f0ee;font-size:13px;gap:8px}
 .row:last-child{border-bottom:none}
-.lbl{color:#6b6b6b}
+.lbl{color:#6b6b6b;line-height:1.4}
 .val{font-weight:600;text-align:right;white-space:nowrap}
-.neg{color:#c0392b}.pos{color:#1a7a3a}.pur{color:#5b45c7}.mut{color:#aaa}
+.neg{color:#c0392b}.pos{color:#1a7a3a}.pur{color:#5b45c7}.mut{color:#aaa}.ora{color:#b35800}
+.div{height:1px;background:#e0dedd;margin:4px 0}
 .strong .lbl{color:#1c1c1e;font-weight:600}
 .strong .val{font-size:15px}
-.div{height:1px;background:#e0dedd;margin:4px 0}
-.hero{background:#f0f7f2;border:1px solid #c3e0ce;border-radius:12px;padding:1.25rem;margin-bottom:10px;text-align:center}
-.hero .hl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#5a8a6a;margin-bottom:6px;font-weight:600}
-.hero .hv{font-size:36px;font-weight:700;color:#1a7a3a;line-height:1}
-.hero .hs{font-size:12px;color:#5a8a6a;margin-top:4px}
-.mg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.mg3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-.mg4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
-.met{background:#f8f8f7;border-radius:10px;padding:10px 12px;text-align:center}
-.met .ml{font-size:11px;color:#6b6b6b;margin-bottom:4px;font-weight:500;line-height:1.3}
-.met .mv{font-size:18px;font-weight:700}
+/* Métriques */
+.mg{display:grid;gap:8px;margin-bottom:10px}
+.mg.c2{grid-template-columns:1fr 1fr}
+.mg.c3{grid-template-columns:repeat(3,1fr)}
+.mg.c4{grid-template-columns:repeat(4,1fr)}
+.met{background:#f8f8f7;border-radius:10px;padding:12px 14px;text-align:center}
+.met.green{background:#f0f7f2}
+.met.blue{background:#e8f0fe}
+.met.orange{background:#fff8f0}
+.met.red{background:#fff0f0}
+.met .ml{font-size:11px;color:#6b6b6b;margin-bottom:6px;font-weight:500;line-height:1.3}
+.met .mv{font-size:22px;font-weight:700;line-height:1}
+.met .ms{font-size:11px;color:#8e8e93;margin-top:4px}
+/* Hero */
+.hero{border-radius:12px;padding:1.5rem;margin-bottom:10px;text-align:center}
+.hero .hl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-weight:600;opacity:.7}
+.hero .hv{font-size:48px;font-weight:700;line-height:1}
+.hero .hs{font-size:13px;margin-top:6px;opacity:.8}
+/* Jours posables */
+.jours-hero{background:linear-gradient(135deg,#1a7a3a,#2eaa55);color:#fff;border-radius:16px;padding:1.5rem;margin-bottom:12px}
+.jours-hero .hl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.7);margin-bottom:8px;font-weight:600}
+.jours-hero .hv{font-size:56px;font-weight:800;line-height:1;color:#fff}
+.jours-hero .hs{font-size:13px;color:rgba(255,255,255,.8);margin-top:6px}
+/* Badges */
 .badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600}
 .bs{background:#d4edda;color:#155724}.bw{background:#fff3cd;color:#856404}
 .bi{background:#d1ecf1;color:#0c5460}.bd{background:#f8d7da;color:#721c24}
-.alert{border-radius:8px;padding:10px 12px;font-size:12px;margin-top:8px;display:none;background:#f8d7da;color:#721c24;font-weight:500}
-.ib{background:#e8f0fe;border-radius:8px;padding:10px 12px;font-size:12px;color:#1a56a0;margin-bottom:10px;line-height:1.5}
-.wb{background:#fff3cd;border-radius:8px;padding:10px 12px;font-size:12px;color:#856404;margin-top:8px;line-height:1.5}
-.gb{background:#d4edda;border-radius:8px;padding:10px 12px;font-size:12px;color:#155724;margin-bottom:8px;display:none}
+/* Inputs */
 label{font-size:12px;color:#6b6b6b;display:block;margin-bottom:4px;font-weight:500}
-input[type=number],input[type=text],select,textarea{padding:7px 10px;border:1px solid #d1d0ce;border-radius:8px;font-family:inherit;font-size:13px;background:#fff;color:#1c1c1e}
-input[type=range]{width:100%;accent-color:#1a7a3a}
+input[type=number],input[type=text],input[type=password],select,textarea{padding:7px 10px;border:1px solid #d1d0ce;border-radius:8px;font-family:inherit;font-size:13px;background:#fff;color:#1c1c1e;width:100%}
+input[type=number]{text-align:right}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pgrid input,.pgrid select{width:100%}
-.srow{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.srow input[type=range]{flex:1}
-.sv{font-size:22px;font-weight:700;min-width:60px;text-align:right}
-.sl{display:flex;justify-content:space-between;font-size:11px;color:#8e8e93;margin-top:2px;margin-bottom:10px}
-button.primary{background:#1a7a3a;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
-button.sec{background:#fff;color:#1c1c1e;border:1px solid #d1d0ce;border-radius:8px;padding:7px 14px;font-family:inherit;font-size:13px;cursor:pointer}
+/* Buttons */
+button.primary{background:#1a7a3a;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+button.primary:hover{background:#155f2e}
+button.sec{background:#fff;color:#1c1c1e;border:1px solid #d1d0ce;border-radius:8px;padding:8px 16px;font-family:inherit;font-size:13px;cursor:pointer}
 button.sec:hover{background:#f0f0ee}
-.sbar{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px}
-.sbar>div{flex:1;min-width:100px}
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{color:#8e8e93;font-weight:600;padding:7px 4px;border-bottom:1px solid #e0dedd;font-size:10px;text-transform:uppercase;letter-spacing:.05em;text-align:left}
-.tbl th.r{text-align:right}
-.tbl td{padding:5px 4px;border-bottom:1px solid #f5f5f4;vertical-align:middle}
-.tbl tr.yr td{font-weight:700;background:#f0f0ee;padding:8px 4px;font-size:12px}
-.tbl tr.real td{background:#f0f7f2}
-.tbl tr.rect td{background:#fff8e6}
-.tbl input[type=number]{width:65px;padding:4px 5px;font-size:12px;text-align:right;border:1px solid #d1d0ce;border-radius:6px;background:#fff;color:#1c1c1e;font-family:inherit}
-.tbl .r{text-align:right;font-weight:600;white-space:nowrap}
-.upload-zone{border:2px dashed #d1d0ce;border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:10px}
+button.danger{background:#fff;color:#c0392b;border:1px solid #f5b3b3;border-radius:8px;padding:8px 16px;font-family:inherit;font-size:13px;cursor:pointer}
+/* Upload */
+.upload-zone{border:2px dashed #d1d0ce;border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .15s}
 .upload-zone:hover,.upload-zone.drag{border-color:#1a7a3a;background:#f0f7f2}
 .upload-zone input{display:none}
-.upload-zone .icon{font-size:28px;margin-bottom:6px}
-.upload-zone p{font-size:13px;color:#6b6b6b}
-.upload-zone .hint{font-size:11px;color:#aaa;margin-top:4px}
+.upload-zone .icon{font-size:32px;margin-bottom:8px}
+.upload-zone p{font-size:13px;color:#6b6b6b;margin-bottom:4px}
+.upload-zone .hint{font-size:11px;color:#aaa}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid #6b6b6b;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.reserve-proj{background:linear-gradient(135deg,#f0f7f2,#e8f5ec);border:1px solid #c3e0ce;border-radius:12px;padding:1.25rem;margin-bottom:10px}
-.reserve-proj .rp-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#5a8a6a;margin-bottom:8px;font-weight:600}
-.reserve-proj .rp-big{font-size:42px;font-weight:700;color:#1a7a3a;line-height:1}
-.reserve-proj .rp-sub{font-size:12px;color:#5a8a6a;margin-top:4px}
-.note{font-size:11px;color:#8e8e93;margin-top:4px;font-style:italic}
+.alert{border-radius:8px;padding:10px 12px;font-size:12px;display:none}
+.alert.danger{background:#f8d7da;color:#721c24}
+.alert.success{background:#d4edda;color:#155724}
+.note{font-size:11px;color:#8e8e93;margin-top:6px;line-height:1.5}
+/* Table */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{color:#8e8e93;font-weight:600;padding:8px 6px;border-bottom:1px solid #e0dedd;font-size:10px;text-transform:uppercase;letter-spacing:.05em;text-align:left;white-space:nowrap}
+.tbl th.r{text-align:right}
+.tbl td{padding:6px 6px;border-bottom:1px solid #f5f5f4;vertical-align:middle}
+.tbl tr.yr td{font-weight:700;background:#f0f0ee;padding:9px 6px;font-size:12px}
+.tbl tr.real td{background:#f0f7f2}
+.tbl tr.rect td{background:#fff8f0}
+.tbl tr.sick td{background:#fff0f0}
+.tbl input[type=number]{width:62px;padding:4px 6px;font-size:12px;border:1px solid #d1d0ce;border-radius:6px;background:#fff;font-family:inherit}
+.tbl .r{text-align:right;white-space:nowrap}
+/* Saisie mensuelle */
+.entry-form{background:#fff;border:1px solid #e0dedd;border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px}
+.entry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.entry-grid.wide{grid-template-columns:repeat(2,1fr)}
+.entry-field label{font-size:11px;color:#8e8e93;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.entry-field input{font-size:14px;font-weight:500}
 </style>
 </head>
 <body>
 <div class="app">
-<h1>Portage salarial</h1>
-<p class="sub">Julien HOCQ · Fluent IT · depuis nov. 2025</p>
+<div class="header">
+  <h1>Portage salarial</h1>
+  <p>Julien HOCQ · Fluent IT · depuis nov. 2025</p>
+</div>
 
 <div class="tabs">
-  <button class="tab active" onclick="sw('sim')">Simulateur</button>
+  <button class="tab active" onclick="sw('dashboard')">Tableau de bord</button>
   <button class="tab" onclick="sw('suivi')">Suivi mensuel</button>
-  <button class="tab" onclick="sw('annuel')">Bilan annuel</button>
   <button class="tab" onclick="sw('params')">Paramètres</button>
 </div>
 
-<!-- ═══ SIMULATEUR ═══ -->
-<div id="p-sim" class="pane active">
-  <div class="sbar">
-    <div><label>Mois</label>
-      <select id="sm" style="width:100%">
-        <option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option>
-        <option value="3">Avril</option><option value="4">Mai</option><option value="5">Juin</option>
-        <option value="6">Juillet</option><option value="7">Août</option><option value="8">Septembre</option>
-        <option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option>
-      </select>
-    </div>
-    <div><label>Année</label>
-      <select id="sy" style="width:100%">
-        <option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
-      </select>
-    </div>
-    <div style="display:flex;align-items:flex-end">
-      <button class="primary" onclick="saveM()">↓ Enregistrer dans le suivi</button>
-    </div>
+<!-- ═══ TABLEAU DE BORD ═══ -->
+<div id="p-dashboard" class="pane active">
+
+  <div class="jours-hero">
+    <div class="hl">Jours posables actuellement</div>
+    <div class="hv" id="db-jpos">—</div>
+    <div class="hs" id="db-jpos-sub">jours sans travailler, salaire maintenu par la réserve</div>
   </div>
 
+  <div class="stitle">Réserve trésorerie</div>
+  <div class="mg c3">
+    <div class="met green"><div class="ml">Réserve calculée</div><div class="mv pos" id="db-rc">—</div><div class="ms">cumulée depuis nov. 2025</div></div>
+    <div class="met blue"><div class="ml">Réserve réelle connue</div><div class="mv" style="color:#185fa5" id="db-rr">—</div><div class="ms" id="db-rr-date">—</div></div>
+    <div class="met"><div class="ml">Écart</div><div class="mv" id="db-ecart">—</div><div class="ms">TVA NDF ~62 €</div></div>
+  </div>
+
+  <div class="stitle">Revenus cumulés</div>
+  <div class="mg c2">
+    <div class="met green"><div class="ml">Revenu total net reçu</div><div class="mv pos" id="db-rev">—</div></div>
+    <div class="met"><div class="ml">Équivalent brut CDI / an</div><div class="mv" id="db-cdi">—</div><div class="ms">projection sur 12 mois</div></div>
+  </div>
+
+  <div class="stitle">Jours — depuis nov. 2025</div>
+  <div class="mg c4">
+    <div class="met"><div class="ml">Travaillés</div><div class="mv" id="db-jt">—</div></div>
+    <div class="met orange"><div class="ml">Congés pris</div><div class="mv ora" id="db-conges">—</div></div>
+    <div class="met yellow"><div class="ml">Fériés</div><div class="mv" style="color:#856404" id="db-feries">—</div></div>
+    <div class="met red"><div class="ml">Arrêt maladie</div><div class="mv neg" id="db-maladie">—</div><div class="ms" id="db-carence">dont — carence</div></div>
+  </div>
+
+  <div class="stitle">Bilan par année</div>
+  <div id="db-annuel"></div>
+</div>
+
+<!-- ═══ SUIVI MENSUEL ═══ -->
+<div id="p-suivi" class="pane">
+
+  <!-- Import PDF -->
   <div class="card">
-    <div class="stitle">Importer un bulletin de salaire (PDF)</div>
-    <div class="upload-zone" id="drop-zone" onclick="document.getElementById('pdf-input').click()"
+    <div class="stitle">Importer un bulletin (PDF)</div>
+    <div class="upload-zone" id="drop-zone"
+      onclick="document.getElementById('pdf-input').click()"
       ondragover="event.preventDefault();this.classList.add('drag')"
       ondragleave="this.classList.remove('drag')"
       ondrop="handleDrop(event)">
       <input type="file" id="pdf-input" accept=".pdf" onchange="handleFile(this.files[0])">
       <div class="icon">📄</div>
-      <p>Glisse ton bulletin ici ou clique pour sélectionner</p>
-      <p class="hint">Clé API requise dans Paramètres</p>
+      <p>Glisse ton bulletin ou clique pour sélectionner</p>
+      <p class="hint">Clé API requise dans Paramètres · Les champs ci-dessous seront pré-remplis</p>
     </div>
-    <div class="gb" id="pdf-ok"></div>
-    <div class="alert" id="pdf-err"></div>
-    <div id="pdf-loading" style="display:none;text-align:center;padding:.75rem;color:#6b6b6b;font-size:13px">
-      <span class="spin"></span>Analyse en cours...
-    </div>
+    <div id="pdf-loading" style="display:none;text-align:center;padding:.75rem;color:#6b6b6b;font-size:13px"><span class="spin"></span>Analyse en cours...</div>
+    <div class="alert success" id="pdf-ok"></div>
+    <div class="alert danger" id="pdf-err"></div>
   </div>
 
-  <div class="card">
-    <div class="stitle">Jours travaillés réels</div>
-    <div class="srow">
-      <input type="range" id="sj" min="0" max="25" value="17" step="0.5" oninput="onSJ(+this.value)">
-      <span class="sv" id="sj-d">17</span>
+  <!-- Saisie -->
+  <div class="entry-form">
+    <div class="stitle">Saisie mensuelle</div>
+    <div class="mg c2" style="margin-bottom:10px">
+      <div class="entry-field">
+        <label>Mois</label>
+        <select id="em">
+          <option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option>
+          <option value="3">Avril</option><option value="4">Mai</option><option value="5">Juin</option>
+          <option value="6">Juillet</option><option value="7">Août</option><option value="8">Septembre</option>
+          <option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option>
+        </select>
+      </div>
+      <div class="entry-field">
+        <label>Année</label>
+        <select id="ey">
+          <option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
+        </select>
+      </div>
     </div>
-    <div class="sl"><span>0 j</span><span>25 j</span></div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <label style="margin:0;white-space:nowrap">Exact :</label>
-      <input type="number" id="sj-i" value="17" min="0" max="25" step="0.5" style="width:80px" oninput="onIJ(+this.value)">
+    <div class="entry-grid">
+      <div class="entry-field"><label>Jours travaillés réels</label><input type="number" id="e-jr" value="17" min="0" max="25" step="0.5" oninput="syncEntry()"></div>
+      <div class="entry-field"><label>Jours facturés client</label><input type="number" id="e-jf" value="17" min="-10" max="35" step="0.5" oninput="syncEntry()"></div>
+      <div class="entry-field"><label>Frais remboursés (€)</label><input type="number" id="e-f" value="0" min="0" max="10000" step="0.01"></div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="stitle">Jours facturés au client</div>
-    <div class="ib" style="margin-bottom:10px">Normalement = jours travaillés réels. À modifier uniquement si erreur de facturation ou rectification.</div>
-    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-      <label style="margin:0;white-space:nowrap">Jours facturés :</label>
-      <input type="number" id="sjf-i" value="17" min="-10" max="35" step="0.5" style="width:80px" oninput="onIJF(+this.value)">
-      <span id="sjf-diff" style="font-size:12px;color:#8e8e93"></span>
+    <div class="entry-grid">
+      <div class="entry-field"><label>Jours d'arrêt maladie</label><input type="number" id="e-mal" value="0" min="0" max="30" step="0.5" oninput="syncMaladie()"></div>
+      <div class="entry-field"><label>dont carence (auto)</label><input type="number" id="e-car" value="0" min="0" max="3" step="0.5" readonly style="background:#f8f8f7;color:#6b6b6b"></div>
+      <div class="entry-field"><label>IJ Sécu estimées (€)</label><input type="number" id="e-ij" value="0" min="0" step="0.01" readonly style="background:#f8f8f7;color:#6b6b6b"></div>
     </div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <label style="margin:0;white-space:nowrap">Rectification :</label>
-      <input type="number" id="srect" value="0" min="-25" max="25" step="0.5" style="width:80px" oninput="onRect(+this.value)">
-      <span style="font-size:12px;color:#8e8e93">j (+ ou − à ajouter aux jours facturés)</span>
-    </div>
-    <div class="note" id="sjf-note"></div>
-  </div>
-
-  <div class="card">
-    <div class="stitle">Frais remboursés</div>
-    <div class="srow">
-      <input type="range" id="sf" min="0" max="1500" value="650" step="10" oninput="onSF(+this.value)">
-      <span class="sv pur" id="sf-d">650</span>
-    </div>
-    <div class="sl"><span>0 €</span><span>1 500 €</span></div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <label style="margin:0;white-space:nowrap">Exact :</label>
-      <input type="number" id="sf-i" value="650" min="0" max="10000" step="0.01" style="width:110px" oninput="onIF(+this.value)">
-      <span style="font-size:12px;color:#6b6b6b">€</span>
+    <div id="e-preview" style="margin:12px 0;padding:12px;background:#f8f8f7;border-radius:8px;font-size:13px;display:none"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="primary" onclick="saveEntry()">↓ Enregistrer ce mois</button>
+      <button class="sec" onclick="clearEntry()">Effacer les champs</button>
     </div>
   </div>
 
-  <div class="hero">
-    <div class="hl">Revenu global net du mois</div>
-    <div class="hv" id="s-tot">—</div>
-    <div class="hs">salaire net payé + remboursement frais</div>
-  </div>
-
-  <div class="card">
-    <div class="row"><span class="lbl">Facturé client (<span id="r-jf-lbl">17</span> j)</span><span class="val" id="r-fac">—</span></div>
-    <div class="row"><span class="lbl">− Commission (<span id="r-ct">3</span>%)</span><span class="val neg" id="r-com">—</span></div>
-    <div class="row"><span class="lbl">− Frais remboursés</span><span class="val pur" id="r-fd">—</span></div>
-    <div class="row"><span class="lbl">− Charges patronales (~42,8%)</span><span class="val neg" id="r-pat">—</span></div>
-    <div class="row"><span class="lbl">= Salaire brut</span><span class="val" id="r-brut">—</span></div>
-    <div class="div"></div>
-    <div class="row"><span class="lbl">− Charges salariales (~20,9%)</span><span class="val neg" id="r-sal">—</span></div>
-    <div class="row"><span class="lbl">− Tickets restaurant (<span id="r-trn">17</span> × 4,88 €)</span><span class="val neg" id="r-tr">—</span></div>
-    <div class="row"><span class="lbl">Net avant impôt</span><span class="val" id="r-nav">—</span></div>
-    <div class="row"><span class="lbl">− PAS (<span id="r-pt">14,1</span>%)</span><span class="val neg" id="r-pas">—</span></div>
-    <div class="div"></div>
-    <div class="row strong"><span class="lbl">Salaire net payé</span><span class="val pos" id="r-net">—</span></div>
-    <div class="row strong"><span class="lbl">+ Remboursement frais</span><span class="val pur" id="r-ft">—</span></div>
-    <div class="div"></div>
-    <div class="row strong"><span class="lbl">Total reçu</span><span class="val pos" id="r-tot">—</span></div>
-  </div>
-  <div class="alert" id="s-al">Frais trop élevés : dépassent le disponible après commission et charges.</div>
-
-  <div class="stitle" style="margin-top:14px">Jours de réserve</div>
-  <div class="ib" style="margin-top:0">Les frais étant nets de charges, ils valent plus par euro qu'un jour travaillé — d'où des jours financés parfois supérieurs aux jours travaillés.</div>
-  <div class="mg">
-    <div class="met"><div class="ml">Valeur nette / jour (ref. <span id="r-jcr">17</span> j)</div><div class="mv" id="r-vj">—</div></div>
-    <div class="met"><div class="ml">Jours financés ce mois</div><div class="mv pos" id="r-jf">—</div></div>
-  </div>
-  <div class="card">
-    <div class="row"><span class="lbl">Écart vs <span id="r-jcl">17</span> j cibles</span><span class="val" id="r-je">—</span></div>
-    <div class="row" style="border-bottom:none"><span class="lbl">Δ réserve estimé ce mois</span><span class="val" id="r-dr">—</span></div>
-  </div>
-</div>
-
-<!-- ═══ SUIVI MENSUEL ═══ -->
-<div id="p-suivi" class="pane">
-  <div class="stitle">Réserve trésorerie</div>
-  <div class="reserve-proj">
-    <div class="rp-label">Jours posables actuellement</div>
-    <div class="rp-big" id="su-jpos">—</div>
-    <div class="rp-sub" id="su-jpos-sub">jours sans travailler, salaire maintenu</div>
-  </div>
-  <div class="mg3">
-    <div class="met"><div class="ml">Réserve calculée</div><div class="mv pos" id="su-rc">—</div></div>
-    <div class="met"><div class="ml">Réserve réelle connue</div><div class="mv" style="color:#185fa5" id="su-rrd">—</div></div>
-    <div class="met"><div class="ml">Écart calc. vs réel</div><div class="mv" id="su-re">—</div></div>
-  </div>
-  <div class="card" style="margin-bottom:12px">
-    <div class="row">
-      <span class="lbl">Réserve réelle au <input type="text" id="su-rdate" value="31/05/2026" style="width:90px;display:inline;padding:2px 5px;font-size:12px;border:1px solid #d1d0ce;border-radius:6px"></span>
-      <span style="display:flex;gap:6px;align-items:center">
-        <input type="number" id="su-rr" value="2378" min="0" step="1" style="width:100px">
-        <span style="font-size:12px;color:#6b6b6b">€</span>
-      </span>
-    </div>
-    <div class="note">Source : relevé Fluent IT. Écart résiduel ~62 € = remboursements TVA sur NDF.</div>
-  </div>
-
-  <div class="stitle">Récapitulatif</div>
-  <div class="mg4" style="margin-bottom:10px">
-    <div class="met"><div class="ml">Jours travaillés</div><div class="mv" id="su-jt">—</div></div>
-    <div class="met"><div class="ml">Jours financés</div><div class="mv pos" id="su-jft">—</div></div>
-    <div class="met"><div class="ml">Congés pris</div><div class="mv" id="su-ct">—</div></div>
-    <div class="met"><div class="ml">Revenu total</div><div class="mv pos" id="su-rt">—</div></div>
-  </div>
-
-  <div class="stitle">Historique mensuel</div>
-  <div class="ib" style="margin-top:0">● = données réelles issues du bulletin · 🔄 = mois avec rectification de facturation</div>
+  <!-- Historique -->
+  <div class="stitle">Historique</div>
   <div style="overflow-x:auto">
     <table class="tbl">
       <thead><tr>
         <th style="min-width:72px">Mois</th>
-        <th style="min-width:65px" title="Jours travaillés réels">J. réels</th>
-        <th style="min-width:65px" title="Jours effectivement facturés au client">J. fact.</th>
-        <th style="min-width:82px">Frais €</th>
-        <th style="min-width:55px" title="Fériés en semaine — pré-rempli auto">Fériés</th>
-        <th class="r" style="min-width:88px">Total net</th>
-        <th class="r" style="min-width:72px">J. financés</th>
-        <th class="r" style="min-width:60px">Congés</th>
+        <th class="r" style="min-width:55px">J. réels</th>
+        <th class="r" style="min-width:55px">J. fact.</th>
+        <th class="r" style="min-width:60px">Frais €</th>
+        <th class="r" style="min-width:55px">Fériés</th>
+        <th class="r" style="min-width:55px">Congés</th>
+        <th class="r" style="min-width:55px">Maladie</th>
+        <th class="r" style="min-width:88px">Net reçu</th>
         <th class="r" style="min-width:78px">Δ Réserve</th>
+        <th style="min-width:30px"></th>
       </tr></thead>
       <tbody id="su-body"></tbody>
     </table>
   </div>
 
-  <div class="card" style="margin-top:10px">
-    <div class="row"><span class="lbl">Total congés pris</span><span class="val" id="su-ct2">—</span></div>
-    <div class="row"><span class="lbl">Total fériés (semaine)</span><span class="val" id="su-ft">—</span></div>
-    <div class="row"><span class="lbl">Réserve cumulée calculée</span><span class="val pos" id="su-rct">—</span></div>
-  </div>
-
-  <div class="stitle" style="margin-top:14px">Export / Import</div>
-  <div class="card">
-    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+  <!-- Export/Import -->
+  <div class="card" style="margin-top:12px">
+    <div class="stitle">Données</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
       <button class="primary" onclick="expJ()">↓ Exporter JSON</button>
       <button class="sec" onclick="togImp()">↑ Importer JSON</button>
     </div>
     <div id="jimp" style="display:none">
-      <textarea id="jarea" style="width:100%;height:90px;font-family:monospace;font-size:11px;border:1px solid #d1d0ce;border-radius:8px;padding:8px;background:#f8f8f7;resize:vertical" placeholder="Colle ton JSON ici..."></textarea>
-      <button class="primary" style="margin-top:8px" onclick="impJ()">Charger</button>
+      <textarea id="jarea" style="height:80px;font-family:monospace;font-size:11px;resize:vertical;margin-bottom:8px" placeholder="Colle ton JSON ici..."></textarea>
+      <button class="primary" onclick="impJ()">Charger</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ BILAN ANNUEL ═══ -->
-<div id="p-annuel" class="pane">
-  <div id="an-content"></div>
-  <div class="stitle" style="margin-top:6px">Jours fériés en semaine par année</div>
-  <div id="an-feries"></div>
-</div>
-
 <!-- ═══ PARAMÈTRES ═══ -->
 <div id="p-params" class="pane">
-  <div class="stitle">Paramètres du contrat</div>
-  <div class="pgrid">
-    <div><label>TJM (€)</label><input type="number" id="p-tjm" value="490" min="0" step="10" oninput="compute()"></div>
-    <div><label>Commission (%)</label><input type="number" id="p-com" value="3" min="0" max="20" step="0.1" oninput="compute()"></div>
-    <div><label>Taux PAS (%)</label><input type="number" id="p-pas" value="14.1" min="0" max="45" step="0.1" oninput="compute()"></div>
-    <div><label>Jours cibles / mois</label><input type="number" id="p-jc" value="17" min="1" max="25" step="0.5" oninput="compute()"></div>
-    <div><label>Jours travaillés / an</label><input type="number" id="p-jan" value="204" min="1" max="260" step="1" oninput="compute()"></div>
-    <div><label>Objectif congés / an</label><input type="number" id="p-cobj" value="45" min="0" max="100" step="1" oninput="compute()"></div>
+  <div class="card">
+    <div class="stitle">Contrat</div>
+    <div class="pgrid">
+      <div><label>TJM (€)</label><input type="number" id="p-tjm" value="490" min="0" step="10"></div>
+      <div><label>Commission portage (%)</label><input type="number" id="p-com" value="3" min="0" max="20" step="0.1"></div>
+      <div><label>Taux PAS (%)</label><input type="number" id="p-pas" value="14.1" min="0" max="45" step="0.1"></div>
+      <div><label>Jours cibles / mois</label><input type="number" id="p-jc" value="17" min="1" max="25" step="0.5"></div>
+      <div><label>Objectif congés / an</label><input type="number" id="p-cobj" value="45" min="0" max="100" step="1"></div>
+    </div>
   </div>
-  <div class="stitle" style="margin-top:16px">Clé API Anthropic (analyse PDF)</div>
-  <input type="password" id="p-apikey" style="width:100%;margin-bottom:6px" placeholder="sk-ant-api03-...">
-  <div class="note">Stockée localement dans le navigateur uniquement.</div>
-  <div class="ib" style="margin-top:12px">Charges calibrées sur bulletins réels (nov 2025 – mai 2026) : patronales ~42,8%, salariales ~20,9%, TR salarié 4,88 €/j.</div>
-  <div class="wb">Période nov 2025 → mars 2026 : NDF imputées sur la réserve par erreur. Pris en compte via données réelles des bulletins.</div>
-  <div style="margin-top:14px">
-    <button class="sec" onclick="clearStorage()">🗑 Effacer toutes les données locales</button>
+
+  <div class="card">
+    <div class="stitle">Réserve réelle connue</div>
+    <div class="pgrid">
+      <div><label>Montant (€)</label><input type="number" id="p-rr" value="2378" min="0" step="1"></div>
+      <div><label>À la date du</label><input type="text" id="p-rdate" value="31/05/2026"></div>
+    </div>
+    <div class="note">Source : relevé de compte Fluent IT. Mise à jour manuelle dès que tu reçois un nouveau relevé.</div>
+  </div>
+
+  <div class="card">
+    <div class="stitle">Clé API Anthropic (analyse PDF bulletin)</div>
+    <input type="password" id="p-apikey" placeholder="sk-ant-api03-..." style="margin-bottom:8px">
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="primary" onclick="saveParams()">Enregistrer les paramètres</button>
+      <span id="params-saved" style="font-size:12px;color:#1a7a3a;display:none">✓ Enregistré</span>
+    </div>
+    <div class="note">La clé est stockée uniquement dans le navigateur (localStorage). Elle n'est transmise qu'à l'API Anthropic lors de l'analyse d'un PDF.</div>
+  </div>
+
+  <div class="card">
+    <div class="stitle">Calibration des charges</div>
+    <div class="note">Taux issus des bulletins réels (nov. 2025 – mai 2026) :<br>
+    · Charges patronales : ~42,8% du brut<br>
+    · Charges salariales : ~20,9% du brut<br>
+    · TR salarié : 4,88 €/j · TR patronal : 9,04 €/j<br>
+    · IJ Sécu maladie : 50% du salaire journalier brut (plafonné 1,8× SMIC)<br>
+    · Carence : 3 premiers jours d'arrêt à charge</div>
+  </div>
+
+  <div class="card" style="border-color:#f5b3b3">
+    <div class="stitle" style="color:#c0392b">Zone danger</div>
+    <button class="danger" onclick="clearStorage()">🗑 Effacer toutes les données locales</button>
+    <div class="note" style="margin-top:8px">Supprime toutes les données saisies. Exporte un JSON avant de faire ça.</div>
   </div>
 </div>
 </div>
 
 <script>
-const TPAT=2105.60/4913.69, TSAL=1026.20/4913.69;
-const TRSAL=102.48/17, TRPAT=153.72/17, TCSG=331.74/4913.69;
-const MS=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-const JS=['dim','lun','mar','mer','jeu','ven','sam'];
+// ─── Constantes charges (bulletins réels nov 2025 – mai 2026)
+const TPAT  = 2105.60/4913.69;  // ~42.85%
+const TSAL  = 1026.20/4913.69;  // ~20.89%
+const TRSAL = 102.48/17;         // TR salarié €/j
+const TRPAT = 153.72/17;         // TR patronal €/j
+const TCSG  = 331.74/4913.69;   // CSG déductible
+const SMICJ = 59.36;             // SMIC journalier 2026 (~1801.80/30.42)
+const IJ_PLAFOND = SMICJ * 1.8; // plafond IJ Sécu
 
-const FR={
+const MS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+const MOIS_L = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const JJ = ['dim','lun','mar','mer','jeu','ven','sam'];
+
+// ─── Jours fériés
+const FR = {
   2025:[{d:'2025-01-01',l:"Jour de l'an"},{d:'2025-04-18',l:'Vendredi Saint'},{d:'2025-04-21',l:'Lundi de Pâques'},{d:'2025-05-01',l:'Fête du Travail'},{d:'2025-05-08',l:'Victoire 1945'},{d:'2025-05-29',l:'Ascension'},{d:'2025-06-09',l:'Lundi de Pentecôte'},{d:'2025-07-14',l:'Fête Nationale'},{d:'2025-08-15',l:'Assomption'},{d:'2025-11-11',l:'Armistice'},{d:'2025-12-25',l:'Noël'}],
-  2026:[{d:'2026-01-01',l:"Jour de l'an"},{d:'2026-04-03',l:'Vendredi Saint'},{d:'2026-04-06',l:'Lundi de Pâques'},{d:'2026-05-01',l:'Fête du Travail'},{d:'2026-05-08',l:'Victoire 1945'},{d:'2026-05-14',l:'Ascension'},{d:'2026-05-25',l:'Pentecôte / Solidarité'},{d:'2026-07-14',l:'Fête Nationale'},{d:'2026-11-11',l:'Armistice'},{d:'2026-12-25',l:'Noël'}],
+  2026:[{d:'2026-01-01',l:"Jour de l'an"},{d:'2026-04-03',l:'Vendredi Saint'},{d:'2026-04-06',l:'Lundi de Pâques'},{d:'2026-05-01',l:'Fête du Travail'},{d:'2026-05-08',l:'Victoire 1945'},{d:'2026-05-14',l:'Ascension'},{d:'2026-05-25',l:'Pentecôte/Solidarité'},{d:'2026-07-14',l:'Fête Nationale'},{d:'2026-11-11',l:'Armistice'},{d:'2026-12-25',l:'Noël'}],
   2027:[{d:'2027-01-01',l:"Jour de l'an"},{d:'2027-03-26',l:'Vendredi Saint'},{d:'2027-03-29',l:'Lundi de Pâques'},{d:'2027-05-06',l:'Ascension'},{d:'2027-05-17',l:'Lundi de Pentecôte'},{d:'2027-07-14',l:'Fête Nationale'},{d:'2027-11-11',l:'Armistice'},{d:'2027-12-25',l:'Noël'}]
 };
 
-function fOuvres(y){return(FR[y]||[]).filter(f=>{const j=new Date(f.d).getDay();return j>=1&&j<=5;});}
-function fMois(y,m){return(FR[y]||[]).filter(f=>{const dt=new Date(f.d),j=dt.getDay();return dt.getFullYear()===y&&dt.getMonth()===m&&j>=1&&j<=5;}).length;}
-function jOuvres(y,m){let n=0;const d=new Date(y,m,1);while(d.getMonth()===m){if(d.getDay()>=1&&d.getDay()<=5)n++;d.setDate(d.getDate()+1);}return n;}
+function fOuvres(y){ return (FR[y]||[]).filter(f=>{const j=new Date(f.d).getDay();return j>=1&&j<=5;}); }
+function fMois(y,m){ return (FR[y]||[]).filter(f=>{const dt=new Date(f.d),j=dt.getDay();return dt.getFullYear()===y&&dt.getMonth()===m&&j>=1&&j<=5;}).length; }
+function jOuvres(y,m){ let n=0;const d=new Date(y,m,1);while(d.getMonth()===m){if(d.getDay()>=1&&d.getDay()<=5)n++;d.setDate(d.getDate()+1);}return n; }
 
-// Données réelles bulletins — utilisées pour Δ réserve précis
-// jf = jours facturés réels (peut différer des jours déclarés en cas d'erreur)
-const BL={
-  '2025-10':{ct:7109.62, fht:8330,   cm:291.55,  ndf:790.73,  jf:17},
-  '2025-11':{ct:7804.62, fht:8820,   cm:308.70,  ndf:312.49,  jf:18},
-  '2026-0' :{ct:8223.38, fht:10290,  cm:360.15,  ndf:352.05,  jf:21},
-  '2026-1' :{ct:8555.00, fht:8820,   cm:264.60,  ndf:299.57,  jf:18},
-  '2026-2' :{ct:8555.01, fht:10290,  cm:308.70,  ndf:697.43,  jf:21},
-  '2026-3' :{ct:7173.01, fht:8330,   cm:249.90,  ndf:906.93,  jf:17},
-  '2026-4' :{ct:7731.87, fht:8085,   cm:242.55,  ndf:230.00,  jf:16.5}, // facturé 16.5 par erreur, réel=12.5
+// ─── Données réelles bulletins
+const BL = {
+  '2025-10':{ct:7109.62, fht:8330,   cm:291.55,  ndf:790.73},
+  '2025-11':{ct:7804.62, fht:8820,   cm:308.70,  ndf:312.49},
+  '2026-0' :{ct:8223.38, fht:10290,  cm:360.15,  ndf:352.05},
+  '2026-1' :{ct:8555.00, fht:8820,   cm:264.60,  ndf:299.57},
+  '2026-2' :{ct:8555.01, fht:10290,  cm:308.70,  ndf:697.43},
+  '2026-3' :{ct:7173.01, fht:8330,   cm:249.90,  ndf:906.93},
+  '2026-4' :{ct:7731.87, fht:8085,   cm:242.55,  ndf:230.00},
 };
 
-// Données mensuelles : j=jours réels, jf=jours facturés, f=frais, rect=rectification
-const DEFAULT_MD={
-  '2025-10':{j:17,   jf:17,   f:790.73, rect:0},
-  '2025-11':{j:18,   jf:18,   f:312.49, rect:0},
-  '2026-0' :{j:21,   jf:21,   f:352.05, rect:0},
-  '2026-1' :{j:18,   jf:18,   f:299.57, rect:0},
-  '2026-2' :{j:21,   jf:21,   f:697.43, rect:0},
-  '2026-3' :{j:17,   jf:17,   f:906.93, rect:0},
-  '2026-4' :{j:12.5, jf:16.5, f:230.00, rect:0},  // mai : 12.5 réels, 16.5 facturés par erreur
-  '2026-5' :{j:0,    jf:0,    f:0,      rect:-4},  // juin : rectification -4j
+// ─── Données mensuelles pré-remplies
+// jr=jours réels, jf=jours facturés, f=frais, mal=jours maladie
+const DEFAULT_MD = {
+  '2025-10':{jr:17,   jf:17,   f:790.73, mal:0},
+  '2025-11':{jr:18,   jf:18,   f:312.49, mal:0},
+  '2026-0' :{jr:21,   jf:21,   f:352.05, mal:0},
+  '2026-1' :{jr:18,   jf:18,   f:299.57, mal:0},
+  '2026-2' :{jr:21,   jf:21,   f:697.43, mal:0},
+  '2026-3' :{jr:17,   jf:17,   f:906.93, mal:0},
+  '2026-4' :{jr:12.5, jf:16.5, f:230.00, mal:0},
+  '2026-5' :{jr:0,    jf:-4,   f:0,      mal:0},  // juin : rectification -4j
 };
 
-let MD={};
-const LS_KEY='portage_v7';
+let MD = {};
+const LS = 'portage_v8';
 
-function save(){
-  try{localStorage.setItem(LS_KEY,JSON.stringify({
-    MD,
-    rr:document.getElementById('su-rr').value,
-    rdate:document.getElementById('su-rdate').value,
-    apikey:document.getElementById('p-apikey').value,
-    params:{
-      tjm:document.getElementById('p-tjm').value,
-      com:document.getElementById('p-com').value,
-      pas:document.getElementById('p-pas').value,
-      jc:document.getElementById('p-jc').value,
-      jan:document.getElementById('p-jan').value,
-      cobj:document.getElementById('p-cobj').value
-    }
-  }));}catch(e){}
+// ─── Paramètres
+function gP(){
+  return {
+    tjm:   +document.getElementById('p-tjm').value   || 490,
+    comm: (+document.getElementById('p-com').value   || 3)/100,
+    pas:  (+document.getElementById('p-pas').value   || 14.1)/100,
+    jc:    +document.getElementById('p-jc').value    || 17,
+    co:    +document.getElementById('p-cobj').value  || 45,
+    rr:    +document.getElementById('p-rr').value    || 0,
+    rdate:  document.getElementById('p-rdate').value || '',
+    apikey: document.getElementById('p-apikey').value.trim(),
+  };
 }
 
-function load(){
+// ─── localStorage
+function saveParams(){
+  const p=gP();
   try{
-    const d=JSON.parse(localStorage.getItem(LS_KEY));
-    if(!d)return false;
-    if(d.MD)MD=d.MD;
-    if(d.rr)document.getElementById('su-rr').value=d.rr;
-    if(d.rdate)document.getElementById('su-rdate').value=d.rdate;
-    if(d.apikey)document.getElementById('p-apikey').value=d.apikey;
+    const d=JSON.parse(localStorage.getItem(LS)||'{}');
+    d.params={tjm:p.tjm,comm:p.comm*100,pas:p.pas*100,jc:p.jc,co:p.co,rr:p.rr,rdate:p.rdate,apikey:p.apikey};
+    localStorage.setItem(LS,JSON.stringify(d));
+    const s=document.getElementById('params-saved');
+    s.style.display='inline'; setTimeout(()=>s.style.display='none',2000);
+  }catch(e){}
+  compute();
+}
+
+function saveMD(){
+  try{
+    const d=JSON.parse(localStorage.getItem(LS)||'{}');
+    d.MD=MD;
+    localStorage.setItem(LS,JSON.stringify(d));
+  }catch(e){}
+}
+
+function loadAll(){
+  try{
+    const d=JSON.parse(localStorage.getItem(LS));
+    if(!d) return false;
+    if(d.MD) MD=d.MD;
     if(d.params){
       const p=d.params;
-      if(p.tjm)document.getElementById('p-tjm').value=p.tjm;
-      if(p.com)document.getElementById('p-com').value=p.com;
-      if(p.pas)document.getElementById('p-pas').value=p.pas;
-      if(p.jc)document.getElementById('p-jc').value=p.jc;
-      if(p.jan)document.getElementById('p-jan').value=p.jan;
-      if(p.cobj)document.getElementById('p-cobj').value=p.cobj;
+      if(p.tjm!==undefined)    document.getElementById('p-tjm').value=p.tjm;
+      if(p.comm!==undefined)   document.getElementById('p-com').value=p.comm;
+      if(p.pas!==undefined)    document.getElementById('p-pas').value=p.pas;
+      if(p.jc!==undefined)     document.getElementById('p-jc').value=p.jc;
+      if(p.co!==undefined)     document.getElementById('p-cobj').value=p.co;
+      if(p.rr!==undefined)     document.getElementById('p-rr').value=p.rr;
+      if(p.rdate)              document.getElementById('p-rdate').value=p.rdate;
+      if(p.apikey)             document.getElementById('p-apikey').value=p.apikey;
     }
     return true;
   }catch(e){return false;}
@@ -392,291 +398,308 @@ function load(){
 
 function clearStorage(){
   if(confirm('Effacer toutes les données locales ?')){
-    localStorage.removeItem(LS_KEY);
+    localStorage.removeItem(LS);
     MD=JSON.parse(JSON.stringify(DEFAULT_MD));
     compute();
   }
 }
 
-function gP(){return{
-  tjm:  +document.getElementById('p-tjm').value||490,
-  comm:(+document.getElementById('p-com').value||3)/100,
-  pas: (+document.getElementById('p-pas').value||14.1)/100,
-  jc:  +document.getElementById('p-jc').value||17,
-  jan: +document.getElementById('p-jan').value||204,
-  co:  +document.getElementById('p-cobj').value||45,
-};}
-
-// Calcul sur jours facturés (pour réserve et net reçu)
-function cal(jFact,f,p){
-  const fac=p.tjm*jFact, cm=fac*p.comm, ap=fac-cm;
-  const tp=TRPAT*jFact, ts=TRSAL*jFact, di=ap-tp-f;
+// ─── Calculs
+function cal(jf,f,p){
+  const fac=p.tjm*jf, cm=fac*p.comm, ap=fac-cm;
+  const tp=TRPAT*jf, ts=TRSAL*jf, di=ap-tp-f;
   const br=di/(1+TPAT), pt=br*TPAT, sl=br*TSAL, nv=br-sl-ts;
   const bi=br-(br*TCSG)-tp, pa=bi*p.pas, ne=nv-pa, tot=ne+f;
-  return{fac,cm,br,pt,sl,ts,nv,pa,ne,tot,di};
+  return{fac,cm,br,pt,sl,ts,nv,pa,ne,tot,di,brut:br};
 }
 
-function vjRef(p){const r=cal(p.jc,0,p);return r.ne/p.jc;}
+function vjRef(p){
+  const r=cal(p.jc,0,p);
+  return r.ne/p.jc;
+}
 
-function dRes(k,jFact,f,p){
+function dRes(k,jf,f,p){
   const b=BL[k];
-  if(b)return(b.fht-b.cm)-b.ct-b.ndf;
-  const c=cal(jFact,f,p),fac=p.tjm*jFact,cm=fac*p.comm;
-  return(fac-cm)-(c.br+c.pt+TRPAT*jFact)-f;
+  if(b) return (b.fht-b.cm)-b.ct-b.ndf;
+  if(jf<=0) return p.tjm*jf*(1-p.comm); // rectification négative
+  const c=cal(jf,f,p);
+  return (c.fac*(1-p.comm))-(c.br+c.pt+TRPAT*jf)-f;
+}
+
+function calcIJ(joursMal, p){
+  // Brut journalier de référence = brut mensuel 17j / 30
+  const ref=cal(p.jc,0,p);
+  const brutJ=ref.brut/30;
+  const ij=Math.min(brutJ*0.5, IJ_PLAFOND);
+  const carence=Math.min(joursMal,3);
+  const joursIndemnises=Math.max(0,joursMal-carence);
+  return{carence, joursIndemnises, ijJ:ij, total:ij*joursIndemnises};
 }
 
 function fm(n,sign=false){
-  const v=Math.round(n),a=Math.abs(v).toLocaleString('fr-FR')+'\u202f€';
-  if(!sign)return(v<0?'−':'')+a;
-  if(v>0)return'+'+a;if(v<0)return'−'+a;return'0\u202f€';
+  const v=Math.round(n), a=Math.abs(v).toLocaleString('fr-FR')+'\u202f€';
+  if(!sign) return (v<0?'−':'')+a;
+  if(v>0) return '+'+a; if(v<0) return '−'+a; return '0\u202f€';
 }
 function fj(n,s=false){
   const a=Math.abs(n).toFixed(1)+' j';
-  if(!s)return n.toFixed(1)+' j';
-  if(n>0.05)return'+'+a;if(n<-0.05)return'−'+a;return'= 0 j';
+  if(!s) return n>=0?n.toFixed(1)+' j':'−'+a;
+  if(n>0.05) return '+'+a; if(n<-0.05) return '−'+a; return '= 0 j';
 }
 function cl(n){return n>0.05?'pos':n<-0.05?'neg':'';}
 
-let sJ=17, sJF=17, sRect=0, sF=650;
-
-function syncJF(){
-  sJF=sJ+sRect;
-  document.getElementById('sjf-i').value=sJF;
-  const diff=sJF-sJ;
-  document.getElementById('sjf-diff').textContent=diff!==0?`(${diff>0?'+':''}${diff} j vs réels)`:'';
-  document.getElementById('sjf-note').textContent=sRect!==0?`Facturation effective : ${sJF} j (${sJ} réels ${sRect>0?'+':''} ${sRect} j de rectification)`:'';
-  document.getElementById('r-jf-lbl').textContent=sJF;
+// ─── Saisie
+function syncEntry(){
+  // Garde jf synchro avec jr par défaut sauf si modifié manuellement
+  const jr=+document.getElementById('e-jr').value||0;
+  const jf=+document.getElementById('e-jf').value||0;
+  updatePreview();
 }
 
-function onSJ(v){sJ=v;document.getElementById('sj-d').textContent=v;document.getElementById('sj-i').value=v;document.getElementById('r-trn').textContent=Math.floor(v);syncJF();cSim();}
-function onIJ(v){sJ=v||0;document.getElementById('sj-d').textContent=sJ;document.getElementById('sj').value=Math.min(sJ,25);document.getElementById('r-trn').textContent=Math.floor(sJ);syncJF();cSim();}
-function onIJF(v){sJF=v||0;sRect=sJF-sJ;document.getElementById('srect').value=sRect;syncJF();cSim();}
-function onRect(v){sRect=v||0;syncJF();cSim();}
-function onSF(v){sF=v;document.getElementById('sf-d').textContent=v;document.getElementById('sf-i').value=v;cSim();}
-function onIF(v){sF=v||0;document.getElementById('sf-d').textContent=sF.toFixed(2);document.getElementById('sf').value=Math.min(sF,1500);cSim();}
-
-function cSim(){
-  const p=gP(), c=cal(sJF,sF,p), vj=vjRef(p);
-  document.getElementById('r-ct').textContent=(p.comm*100).toFixed(1).replace('.0','');
-  document.getElementById('r-pt').textContent=(p.pas*100).toFixed(1);
-  document.getElementById('r-jcl').textContent=p.jc;
-  document.getElementById('r-jcr').textContent=p.jc;
-  document.getElementById('s-tot').textContent=fm(Math.max(0,c.tot));
-  document.getElementById('r-fac').textContent=fm(c.fac);
-  document.getElementById('r-com').textContent='−'+fm(c.cm);
-  document.getElementById('r-fd').textContent='−'+fm(sF);
-  document.getElementById('r-pat').textContent='−'+fm(c.pt);
-  document.getElementById('r-brut').textContent=fm(c.br);
-  document.getElementById('r-sal').textContent='−'+fm(c.sl);
-  document.getElementById('r-tr').textContent='−'+fm(c.ts);
-  document.getElementById('r-nav').textContent=fm(c.nv);
-  document.getElementById('r-pas').textContent='−'+fm(c.pa);
-  document.getElementById('r-net').textContent=fm(c.ne);
-  document.getElementById('r-ft').textContent='+'+fm(sF);
-  document.getElementById('r-tot').textContent=fm(Math.max(0,c.tot));
-  document.getElementById('s-al').style.display=c.di<0?'block':'none';
-  const jf=vj>0?c.tot/vj:0, je=jf-p.jc;
-  document.getElementById('r-vj').textContent=fm(vj);
-  document.getElementById('r-jf').textContent=jf.toFixed(1)+' j';
-  const ej=document.getElementById('r-je');
-  ej.textContent=fj(je,true)+(je>0.05?' → épargnés':je<-0.05?' → à compenser':' → équilibre');
-  ej.className='val '+cl(je);
-  const facN=c.fac*(1-p.comm), co=c.br+c.pt+TRPAT*sJF, dr=facN-co-sF;
-  const del=document.getElementById('r-dr');
-  del.textContent=fm(dr,true); del.className='val '+cl(dr);
+function syncMaladie(){
+  const mal=+document.getElementById('e-mal').value||0;
+  const p=gP();
+  const ij=calcIJ(mal,p);
+  document.getElementById('e-car').value=ij.carence;
+  document.getElementById('e-ij').value=ij.total.toFixed(2);
+  updatePreview();
 }
 
-function saveM(){
-  const m=+document.getElementById('sm').value, y=+document.getElementById('sy').value;
+function updatePreview(){
+  const p=gP();
+  const jr=+document.getElementById('e-jr').value||0;
+  const jf=+document.getElementById('e-jf').value||0;
+  const f=+document.getElementById('e-f').value||0;
+  const mal=+document.getElementById('e-mal').value||0;
+  const ij=calcIJ(mal,p);
+  if(jr===0&&jf===0&&f===0&&mal===0){document.getElementById('e-preview').style.display='none';return;}
+  const c=cal(jf,f,p);
+  const k=`${document.getElementById('ey').value}-${document.getElementById('em').value}`;
+  const dr=dRes(k,jf,f,p);
+  const netTotal=c.tot+ij.total;
+  document.getElementById('e-preview').style.display='block';
+  document.getElementById('e-preview').innerHTML=
+    `<b>Aperçu :</b> Net reçu estimé <b class="pos">${fm(netTotal)}</b>`+
+    (ij.total>0?` (dont ${fm(ij.total)} IJ Sécu)`:'')+ ` · Δ réserve <b class="${cl(dr)}">${fm(dr,true)}</b>`+
+    (jf!==jr?` · <span class="ora">⚠ ${jf>jr?'Surfa':'Sous-fa'}cturation : ${jf} j facturés vs ${jr} j réels</span>`:'');
+}
+
+function saveEntry(){
+  const y=+document.getElementById('ey').value;
+  const m=+document.getElementById('em').value;
+  const jr=+document.getElementById('e-jr').value||0;
+  const jf=+document.getElementById('e-jf').value||0;
+  const f=+document.getElementById('e-f').value||0;
+  const mal=+document.getElementById('e-mal').value||0;
   const k=`${y}-${m}`;
-  MD[k]={j:sJ, jf:sJF, f:sF, rect:sRect};
-  save(); rSuivi(); rAnnuel(); sw('suivi');
+  MD[k]={jr,jf,f,mal};
+  // Met à jour BL si nouveau mois
+  if(!BL[k]&&jf>0){
+    const p=gP();
+    const c=cal(jf,f,p);
+    BL[k]={ct:c.br+c.pt+TRPAT*jf, fht:p.tjm*jf, cm:p.tjm*jf*p.comm, ndf:f};
+  }
+  saveMD(); compute();
+  clearEntry();
+  sw('dashboard');
 }
 
-function setMF(y,m,field,val){
-  const k=`${y}-${m}`;
-  if(!MD[k])MD[k]={j:0,jf:0,f:0,rect:0};
-  const v=parseFloat(val)||0;
-  MD[k][field]=v;
-  // Sync jf si on modifie j ou rect
-  if(field==='j') MD[k].jf=MD[k].j+(MD[k].rect||0);
-  if(field==='rect') MD[k].jf=MD[k].j+v;
-  save(); rSuivi(); rAnnuel();
+function clearEntry(){
+  document.getElementById('e-jr').value=17;
+  document.getElementById('e-jf').value=17;
+  document.getElementById('e-f').value=0;
+  document.getElementById('e-mal').value=0;
+  document.getElementById('e-car').value=0;
+  document.getElementById('e-ij').value=0;
+  document.getElementById('e-preview').style.display='none';
 }
 
+function deleteEntry(k){
+  if(!confirm('Supprimer ce mois ?')) return;
+  delete MD[k]; saveMD(); compute();
+}
+
+// ─── Rendu suivi
 function rSuivi(){
-  const p=gP(), vj=vjRef(p);
-  let rows='', totJ=0, totJf=0, totRev=0, totC=0, totF=0, res=0;
-
+  const p=gP();
+  let rows='';
   [2025,2026,2027].forEach(y=>{
-    rows+=`<tr class="yr"><td colspan="9">${y} — ${fOuvres(y).length} fériés ouvrés</td></tr>`;
+    rows+=`<tr class="yr"><td colspan="10">${y} — ${fOuvres(y).length} fériés ouvrés</td></tr>`;
     for(let m=0;m<12;m++){
       const k=`${y}-${m}`, md=MD[k]||null, has=md!==null;
-      const j=has?md.j:0, jf=has?(md.jf!==undefined?md.jf:md.j):0, f=has?md.f:0;
-      const rect=has?(md.rect||0):0;
-      const jo=jOuvres(y,m), fm2=fMois(y,m);
-      // Congés = jours ouvrés - fériés - jours réels travaillés
-      const cg=has?Math.max(0,jo-fm2-j):null;
-      const isReal=!!BL[k], hasRect=rect!==0;
-      let tn='—',jfs='—',cgs='—',ds='—',dc='mut';
-      if(has){
-        const c=cal(jf,f,p), jfin=vj>0?c.tot/vj:0, dr=dRes(k,jf,f,p);
-        res+=dr; tn=fm(c.tot); jfs=jfin.toFixed(1)+' j'; cgs=cg+' j'; ds=fm(dr,true); dc=cl(dr);
-        totJ+=j; totJf+=jfin; totRev+=c.tot; totC+=cg; totF+=fm2;
-      }
-      const rowClass=hasRect?'rect':isReal?'real':'';
-      const indicator=hasRect?' 🔄':isReal?' <span style="font-size:10px;color:#1a7a3a">●</span>':'';
-      rows+=`<tr class="${rowClass}">
-        <td><b>${MS[m]}</b>${indicator}</td>
-        <td><input type="number" value="${has?j:''}" placeholder="—" min="0" max="25" step="0.5"
-          onchange="setMF(${y},${m},'j',this.value)"></td>
-        <td><input type="number" value="${has?jf:''}" placeholder="—" min="-10" max="35" step="0.5"
-          title="Jours facturés (modifiez via rectification)"
-          style="${j!==jf?'color:#b35800;font-weight:600':''}"
-          onchange="setMF(${y},${m},'jf',this.value)"></td>
-        <td><input type="number" value="${has?f:''}" placeholder="—" min="0" max="10000" step="0.01"
-          style="width:82px" onchange="setMF(${y},${m},'f',this.value)"></td>
-        <td><input type="number" value="${fm2}" min="0" max="5" step="1"
-          style="width:48px;background:#fffbe6" title="Fériés auto — modifiable"
-          onchange="setMF(${y},${m},'fo',this.value)"></td>
-        <td class="r ${has?'pos':'mut'}">${tn}</td>
-        <td class="r ${has?'':'mut'}">${jfs}</td>
-        <td class="r ${has?'':'mut'}">${cgs}</td>
-        <td class="r ${dc}">${ds}</td>
+      if(!has){rows+=`<tr><td><b>${MS[m]}</b></td><td colspan="8" style="color:#aaa;font-size:11px">—</td><td></td></tr>`;continue;}
+      const jr=md.jr, jf=md.jf, f=md.f, mal=md.mal||0;
+      const fm2=fMois(y,m), jo=jOuvres(y,m);
+      const cg=Math.max(0,jo-fm2-jr-mal);
+      const c=cal(jf,f,p);
+      const ij=calcIJ(mal,p);
+      const netTotal=c.tot+ij.total;
+      const dr=dRes(k,jf,f,p);
+      const isReal=!!BL[k]&&['2025-10','2025-11','2026-0','2026-1','2026-2','2026-3','2026-4'].includes(k);
+      const hasSick=mal>0, hasRect=jf!==jr;
+      const rc=hasSick?'sick':hasRect?'rect':isReal?'real':'';
+      const ind=hasSick?' 🤒':hasRect?' 🔄':isReal?' <span style="color:#1a7a3a;font-size:10px">●</span>':'';
+      rows+=`<tr class="${rc}">
+        <td><b>${MS[m]}</b>${ind}</td>
+        <td class="r">${jr} j</td>
+        <td class="r ${jr!==jf?'ora':''}">${jf} j</td>
+        <td class="r">${f>0?f.toLocaleString('fr-FR')+'\u202f€':'—'}</td>
+        <td class="r">${fm2} j</td>
+        <td class="r">${cg} j</td>
+        <td class="r ${hasSick?'neg':''}">${mal>0?mal+' j':'—'}</td>
+        <td class="r pos">${fm(netTotal)}</td>
+        <td class="r ${cl(dr)}">${fm(dr,true)}</td>
+        <td class="r"><button onclick="deleteEntry('${k}')" style="background:none;border:none;cursor:pointer;color:#c0392b;font-size:14px;padding:0 4px" title="Supprimer">×</button></td>
       </tr>`;
     }
   });
-
   document.getElementById('su-body').innerHTML=rows;
-  document.getElementById('su-jt').textContent=totJ+' j';
-  document.getElementById('su-jft').textContent=totJf.toFixed(1)+' j';
-  document.getElementById('su-ct').textContent=totC+' j';
-  document.getElementById('su-ct2').textContent=totC+' j';
-  document.getElementById('su-ft').textContent=totF+' j';
-  document.getElementById('su-rt').textContent=fm(totRev);
-  document.getElementById('su-rct').textContent=fm(res);
-  document.getElementById('su-rc').textContent=fm(res);
-  const rr=+document.getElementById('su-rr').value||0;
-  document.getElementById('su-rrd').textContent=fm(rr);
-  const ec=res-rr, ee=document.getElementById('su-re');
-  ee.textContent=fm(ec,true); ee.className='mv '+cl(ec);
-  // Jours posables = réserve / valeur jour sans NDF
-  const jp=res>0?res/vj:0;
-  document.getElementById('su-jpos').textContent=jp.toFixed(1);
-  document.getElementById('su-jpos-sub').textContent=`jours sans travailler, salaire maintenu (réserve ${fm(res)}, valeur/jour ${fm(vj)})`;
 }
 
-function rAnnuel(){
-  const p=gP(), vj=vjRef(p);
+// ─── Rendu dashboard
+function rDashboard(){
+  const p=gP();
+  const vj=vjRef(p);
+  let totJ=0, totJf=0, totRev=0, totC=0, totF=0, totMal=0, totCar=0, res=0;
+
+  [2025,2026,2027].forEach(y=>{
+    for(let m=0;m<12;m++){
+      const k=`${y}-${m}`, md=MD[k];
+      if(!md)continue;
+      const jr=md.jr, jf=md.jf, f=md.f, mal=md.mal||0;
+      const fm2=fMois(y,m), jo=jOuvres(y,m);
+      const cg=Math.max(0,jo-fm2-jr-mal);
+      const c=cal(jf,f,p);
+      const ij=calcIJ(mal,p);
+      const dr=dRes(k,jf,f,p);
+      res+=dr;
+      totJ+=jr; totJf+=vj>0?(c.tot+ij.total)/vj:0;
+      totRev+=c.tot+ij.total;
+      totC+=cg; totF+=fm2; totMal+=mal; totCar+=ij.carence;
+    }
+  });
+
+  // Jours posables = réserve ÷ valeur jour net (sans NDF)
+  const jp=res>0?res/vj:0;
+  document.getElementById('db-jpos').textContent=jp.toFixed(1);
+  document.getElementById('db-jpos-sub').textContent=
+    `jours sans travailler, salaire maintenu · réserve ${fm(res)} · valeur/jour ${fm(vj)}`;
+
+  document.getElementById('db-rc').textContent=fm(res);
+  document.getElementById('db-rr').textContent=fm(p.rr);
+  document.getElementById('db-rr-date').textContent=p.rdate?`au ${p.rdate}`:'date non renseignée';
+  const ec=res-p.rr;
+  const ee=document.getElementById('db-ecart');
+  ee.textContent=fm(ec,true); ee.className='mv '+cl(ec);
+
+  document.getElementById('db-rev').textContent=fm(totRev);
+  // CDI équiv sur 12 mois glissants
+  const moisSaisis=Object.keys(MD).length;
+  const cdi=moisSaisis>0?Math.round((totRev/moisSaisis)*12/0.773):0;
+  document.getElementById('db-cdi').textContent=moisSaisis?fm(cdi):'—';
+
+  document.getElementById('db-jt').textContent=totJ+' j';
+  document.getElementById('db-conges').textContent=totC+' j';
+  document.getElementById('db-feries').textContent=totF+' j';
+  document.getElementById('db-maladie').textContent=totMal>0?totMal+' j':'—';
+  document.getElementById('db-carence').textContent=totCar>0?`dont ${totCar} j carence`:'dont 0 j carence';
+
+  // Bilan annuel
   let html='';
   [2025,2026,2027].forEach(y=>{
     const fl=fOuvres(y);
-    let totJ=0,totJf=0,totRev=0,totC=0,resAn=0,ms=0;
+    let ytJ=0,ytRev=0,ytC=0,ytMal=0,ytCar=0,ytRes=0,ms=0;
     for(let m=0;m<12;m++){
       const k=`${y}-${m}`, md=MD[k]; if(!md)continue;
-      const jf=md.jf!==undefined?md.jf:md.j;
-      const c=cal(jf,md.f,p), jfin=vj>0?c.tot/vj:0;
-      const jo=jOuvres(y,m), fm2=fMois(y,m), cg=Math.max(0,jo-fm2-md.j);
-      const dr=dRes(k,jf,md.f,p);
-      totJ+=md.j; totJf+=jfin; totRev+=c.tot; totC+=cg; resAn+=dr; ms++;
+      const c=cal(md.jf,md.f,p);
+      const ij=calcIJ(md.mal||0,p);
+      const fm2=fMois(y,m), jo=jOuvres(y,m);
+      const cg=Math.max(0,jo-fm2-md.jr-(md.mal||0));
+      const dr=dRes(k,md.jf,md.f,p);
+      ytJ+=md.jr; ytRev+=c.tot+ij.total; ytC+=cg;
+      ytMal+=md.mal||0; ytCar+=ij.carence; ytRes+=dr; ms++;
     }
-    const cdi=ms?Math.round((totRev/ms)*12/0.773):0;
-    html+=`<div class="card" style="margin-bottom:12px">
-      <div class="stitle">${y} — ${ms}/12 mois saisis</div>
-      <div class="mg" style="margin-bottom:10px">
-        <div class="met"><div class="ml">Revenu total</div><div class="mv pos">${ms?fm(totRev):'—'}</div></div>
-        <div class="met"><div class="ml">Équivalent brut CDI / an</div><div class="mv">${ms?fm(cdi):'—'}</div></div>
-      </div>
-      <div class="row"><span class="lbl">Jours travaillés réels</span><span class="val">${totJ} j</span></div>
-      <div class="row"><span class="lbl">Jours financés</span><span class="val">${totJf.toFixed(1)} j</span></div>
-      <div class="row"><span class="lbl">Congés pris (jours ouvrés − fériés − jours réels)</span><span class="val">${ms?totC+' j':'—'}</span></div>
-      <div class="row"><span class="lbl">Fériés ouvrés de l'année</span><span class="val">${fl.length} j</span></div>
-      <div class="row"><span class="lbl">Δ réserve sur l'année</span><span class="val ${cl(resAn)}">${ms?fm(resAn,true):'—'}</span></div>
-      <div class="row" style="border-bottom:none"><span class="lbl">Congés pris vs objectif (${p.co} j)</span>
-        <span>${!ms?'<span class="badge bi">Pas de données</span>':
-          ms<12?`<span class="badge bi">${totC} j / ${p.co} j (${ms} mois)</span>`:
-          totC>=p.co?`<span class="badge bs">${totC} j ✓</span>`:
-          `<span class="badge bw">${totC} j / ${p.co} j</span>`}</span>
+    if(!ms){html+=`<div class="card" style="margin-bottom:8px"><div class="stitle">${y}</div><div style="color:#aaa;font-size:13px">Aucune donnée</div></div>`;return;}
+    const cdi2=Math.round((ytRev/ms)*12/0.773);
+    const objC=p.co, objF=fl.length;
+    html+=`<div class="card" style="margin-bottom:8px">
+      <div class="stitle">${y} — ${ms}/12 mois</div>
+      <div class="row"><span class="lbl">Revenu net total</span><span class="val pos">${fm(ytRev)}</span></div>
+      <div class="row"><span class="lbl">Équivalent brut CDI / an</span><span class="val">${fm(cdi2)}</span></div>
+      <div class="row"><span class="lbl">Jours travaillés réels</span><span class="val">${ytJ} j</span></div>
+      <div class="row"><span class="lbl">Congés pris</span><span class="val ${ytC>0?'ora':''}">${ytC} j</span></div>
+      <div class="row"><span class="lbl">Fériés ouvrés</span><span class="val">${fl.length} j</span></div>
+      <div class="row"><span class="lbl">Arrêt maladie ${ytCar>0?`(dont ${ytCar} j carence)`:''}</span><span class="val ${ytMal>0?'neg':''}">${ytMal>0?ytMal+' j':'—'}</span></div>
+      <div class="row"><span class="lbl">Δ réserve</span><span class="val ${cl(ytRes)}">${fm(ytRes,true)}</span></div>
+      <div class="row" style="border-bottom:none"><span class="lbl">Congés pris vs objectif ${objC} j</span>
+        <span>${ms<12?`<span class="badge bi">${ytC} j / ${objC} j (${ms} mois)</span>`:
+          ytC>=objC?`<span class="badge bs">${ytC} j ✓</span>`:
+          `<span class="badge bw">${ytC} j / ${objC} j</span>`}</span>
       </div>
     </div>`;
   });
-  document.getElementById('an-content').innerHTML=html;
-  let fh='';
-  [2025,2026,2027].forEach(y=>{
-    const l=fOuvres(y);
-    const trs=l.map(f=>{const dt=new Date(f.d);return`<tr><td>${f.l}</td><td>${f.d}</td><td>${JS[dt.getDay()]}</td></tr>`;}).join('');
-    fh+=`<div class="card" style="margin-bottom:10px">
-      <div class="stitle">${y} — ${l.length} jours fériés en semaine</div>
-      <table class="tbl"><thead><tr><th>Férié</th><th>Date</th><th>Jour</th></tr></thead><tbody>${trs}</tbody></table>
-    </div>`;
-  });
-  document.getElementById('an-feries').innerHTML=fh;
+  document.getElementById('db-annuel').innerHTML=html;
 }
 
-// Upload PDF
+// ─── Upload PDF
 function handleDrop(e){
   e.preventDefault();
   document.getElementById('drop-zone').classList.remove('drag');
   const f=e.dataTransfer.files[0];
-  if(f&&f.type==='application/pdf')handleFile(f);
+  if(f&&f.type==='application/pdf') handleFile(f);
 }
 
 async function handleFile(file){
   if(!file)return;
-  const apikey=document.getElementById('p-apikey').value.trim();
+  const p=gP();
   const ok=document.getElementById('pdf-ok');
   const err=document.getElementById('pdf-err');
   const loading=document.getElementById('pdf-loading');
   ok.style.display='none'; err.style.display='none';
-  if(!apikey){err.textContent='Clé API manquante — renseigne-la dans Paramètres.';err.style.display='block';return;}
+  if(!p.apikey){
+    err.textContent='Clé API manquante — va dans Paramètres, saisis ta clé et clique sur Enregistrer.';
+    err.style.display='block'; return;
+  }
   loading.style.display='block';
   try{
     const b64=await fileToB64(file);
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apikey,'anthropic-version':'2023-06-01'},
+      headers:{'Content-Type':'application/json','x-api-key':p.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:512,
         messages:[{role:'user',content:[
           {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
-          {type:'text',text:'Extrait de ce bulletin de salaire français et réponds UNIQUEMENT en JSON valide, sans backticks :\n{"annee":XXXX,"mois":X,"jours_travailles":X.X,"ndf_virement":X.XX,"net_paye":X.XX,"cout_global_mensuel":X.XX,"facture_ht":X.XX,"commission":X.XX}\nLe mois est de 0 (janvier) à 11 (décembre). ndf_virement = notes de frais remboursées par virement séparé (mettre 0 si absent du bulletin). facture_ht = TJM × jours si non indiqué.'}
+          {type:'text',text:'Extrait de ce bulletin de salaire français. Réponds UNIQUEMENT en JSON valide, sans backticks ni texte autour :\n{"annee":XXXX,"mois":X,"jours_travailles":X.X,"ndf_virement":X.XX,"net_paye":X.XX,"cout_global_mensuel":X.XX,"facture_ht":X.XX,"commission":X.XX}\nRègles : mois = 0 à 11. ndf_virement = notes de frais remboursées par virement séparé (0 si absent). facture_ht = TJM × jours_travailles. cout_global = "Coût Global" mensuel du bulletin.'}
         ]}]
       })
     });
     const data=await resp.json();
-    if(!resp.ok)throw new Error(data.error?.message||'Erreur API');
+    if(!resp.ok) throw new Error(data.error?.message||`HTTP ${resp.status}`);
     const text=data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(text);
-    applyBulletin(parsed);
-    ok.textContent=`✓ Bulletin ${MS[parsed.mois]} ${parsed.annee} importé — ${parsed.jours_travailles} j, ${parsed.ndf_virement} € NDF`;
+    // Remplir le formulaire
+    document.getElementById('em').value=parsed.mois;
+    document.getElementById('ey').value=parsed.annee;
+    document.getElementById('e-jr').value=parsed.jours_travailles||17;
+    document.getElementById('e-jf').value=parsed.jours_travailles||17;
+    document.getElementById('e-f').value=(parsed.ndf_virement||0).toFixed(2);
+    document.getElementById('e-mal').value=0;
+    syncMaladie(); updatePreview();
+    // Stocker dans BL
+    const k=`${parsed.annee}-${parsed.mois}`;
+    if(parsed.cout_global_mensuel&&parsed.facture_ht){
+      BL[k]={ct:parsed.cout_global_mensuel,fht:parsed.facture_ht,cm:parsed.commission||parsed.facture_ht*gP().comm,ndf:parsed.ndf_virement||0};
+    }
+    ok.textContent=`✓ Bulletin ${MOIS_L[parsed.mois]} ${parsed.annee} importé — ${parsed.jours_travailles} j · ${parsed.ndf_virement||0} € NDF · net payé ${fm(parsed.net_paye||0)}`;
     ok.style.display='block';
   }catch(e){
-    err.textContent='Erreur : '+e.message;
+    err.textContent='Erreur : '+e.message+' — vérifie ta clé API dans Paramètres.';
     err.style.display='block';
   }finally{
     loading.style.display='none';
   }
-}
-
-function applyBulletin(d){
-  sJ=d.jours_travailles||17; sF=d.ndf_virement||0; sRect=0; sJF=sJ;
-  document.getElementById('sj').value=Math.min(sJ,25);
-  document.getElementById('sj-d').textContent=sJ;
-  document.getElementById('sj-i').value=sJ;
-  document.getElementById('sjf-i').value=sJF;
-  document.getElementById('srect').value=0;
-  document.getElementById('sf').value=Math.min(sF,1500);
-  document.getElementById('sf-d').textContent=sF.toFixed(2);
-  document.getElementById('sf-i').value=sF;
-  document.getElementById('r-trn').textContent=Math.floor(sJ);
-  document.getElementById('sm').value=d.mois;
-  document.getElementById('sy').value=d.annee;
-  const k=`${d.annee}-${d.mois}`;
-  if(d.cout_global_mensuel&&d.facture_ht){
-    BL[k]={ct:d.cout_global_mensuel,fht:d.facture_ht,cm:d.commission||d.facture_ht*0.03,ndf:sF,jf:sJ};
-  }
-  syncJF(); cSim();
 }
 
 function fileToB64(file){
@@ -688,8 +711,9 @@ function fileToB64(file){
   });
 }
 
+// ─── Export/Import
 function expJ(){
-  const data={MD,rr:document.getElementById('su-rr').value,rdate:document.getElementById('su-rdate').value};
+  const data={MD, v:'v8'};
   const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='portage_data.json';a.click();
 }
@@ -697,33 +721,28 @@ function togImp(){const e=document.getElementById('jimp');e.style.display=e.styl
 function impJ(){
   try{
     const data=JSON.parse(document.getElementById('jarea').value);
-    if(data.MD)MD=data.MD;
-    if(data.rr)document.getElementById('su-rr').value=data.rr;
-    if(data.rdate)document.getElementById('su-rdate').value=data.rdate;
-    save(); compute(); togImp();
+    if(data.MD) MD=data.MD;
+    saveMD(); compute(); togImp();
   }catch(e){alert('JSON invalide : '+e.message);}
 }
 
+// ─── Navigation
 function sw(name){
   document.querySelectorAll('.pane').forEach(e=>e.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
   document.getElementById('p-'+name).classList.add('active');
-  ['sim','suivi','annuel','params'].forEach((t,i)=>{if(t===name)document.querySelectorAll('.tab')[i].classList.add('active');});
+  ['dashboard','suivi','params'].forEach((t,i)=>{if(t===name)document.querySelectorAll('.tab')[i].classList.add('active');});
+  if(name==='suivi') rSuivi();
 }
 
-document.getElementById('su-rr').addEventListener('input',()=>{save();rSuivi();});
-['p-tjm','p-com','p-pas','p-jc','p-jan','p-cobj'].forEach(id=>{
-  document.getElementById(id).addEventListener('change',()=>{save();});
-});
-document.getElementById('p-apikey').addEventListener('change',save);
+function compute(){ rDashboard(); rSuivi(); }
 
-function compute(){cSim();rSuivi();rAnnuel();}
-
+// ─── Init
 const now=new Date();
-document.getElementById('sm').value=now.getMonth();
-document.getElementById('sy').value=now.getFullYear()<=2025?2025:now.getFullYear()<=2026?2026:2027;
-const loaded=load();
-if(!loaded)MD=JSON.parse(JSON.stringify(DEFAULT_MD));
+document.getElementById('em').value=now.getMonth();
+document.getElementById('ey').value=now.getFullYear()<=2025?2025:now.getFullYear()<=2026?2026:2027;
+const loaded=loadAll();
+if(!loaded) MD=JSON.parse(JSON.stringify(DEFAULT_MD));
 compute();
 </script>
 </body>
