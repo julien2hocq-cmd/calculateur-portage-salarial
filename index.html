@@ -677,8 +677,11 @@ async function handleFile(file){
     });
     const data=await resp.json();
     if(!resp.ok) throw new Error(data.error?.message||`HTTP ${resp.status}`);
-    const text=data.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
-    const parsed=JSON.parse(text);
+    const rawText=data.content.map(c=>c.text||'').join('');
+    // Extraction robuste : cherche le premier { ... } valide dans la réponse
+    const jsonMatch=rawText.match(/\{[\s\S]*\}/);
+    if(!jsonMatch) throw new Error(`Réponse inattendue du modèle : "${rawText.substring(0,120)}"`);
+    const parsed=JSON.parse(jsonMatch[0]);
     // Remplir le formulaire
     document.getElementById('em').value=parsed.mois;
     document.getElementById('ey').value=parsed.annee;
