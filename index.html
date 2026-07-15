@@ -667,20 +667,20 @@ async function handleFile(file){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':p.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'claude-opus-4-6',
         max_tokens:512,
+        system:'Tu es un extracteur de données. Tu réponds TOUJOURS et UNIQUEMENT avec un objet JSON valide, sans aucun texte avant ou après, sans backticks, sans markdown.',
         messages:[{role:'user',content:[
           {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
-          {type:'text',text:'Extrait de ce bulletin de salaire français. Réponds UNIQUEMENT en JSON valide, sans backticks ni texte autour :\n{"annee":XXXX,"mois":X,"jours_travailles":X.X,"ndf_virement":X.XX,"net_paye":X.XX,"cout_global_mensuel":X.XX,"facture_ht":X.XX,"commission":X.XX}\nRègles : mois = 0 à 11. ndf_virement = notes de frais remboursées par virement séparé (0 si absent). facture_ht = TJM × jours_travailles. cout_global = "Coût Global" mensuel du bulletin.'}
-        ]}]
+          {type:'text',text:'Extrait ces champs de ce bulletin de salaire français et retourne un JSON pur :\n{"annee":2026,"mois":5,"jours_travailles":16.5,"ndf_virement":0,"net_paye":3439.80,"cout_global_mensuel":7731.87,"facture_ht":8085,"commission":242.55}\nRègles strictes : mois = entier 0 (janvier) à 11 (décembre). ndf_virement = 0 si absent du bulletin (remboursé par virement séparé). cout_global_mensuel = champ "Coût Global" colonne mensuel. facture_ht = TJM × jours_travailles si non indiqué.'}
+        ]},{role:'assistant',content:'{'}]
       })
     });
     const data=await resp.json();
     if(!resp.ok) throw new Error(data.error?.message||`HTTP ${resp.status}`);
-    const rawText=data.content.map(c=>c.text||'').join('');
-    // Extraction robuste : cherche le premier { ... } valide dans la réponse
+    const rawText='{'+data.content.map(c=>c.text||'').join('');
     const jsonMatch=rawText.match(/\{[\s\S]*\}/);
-    if(!jsonMatch) throw new Error(`Réponse inattendue du modèle : "${rawText.substring(0,120)}"`);
+    if(!jsonMatch) throw new Error(`Réponse inattendue : "${rawText.substring(0,120)}"`);
     const parsed=JSON.parse(jsonMatch[0]);
     // Remplir le formulaire
     document.getElementById('em').value=parsed.mois;
