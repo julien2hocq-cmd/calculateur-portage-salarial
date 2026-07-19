@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portage salarial — Julien HOCQ v26.07.16</title>
+<title>Portage salarial — Julien HOCQ</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;background:#f5f5f4;color:#1c1c1e;min-height:100vh}
@@ -125,13 +125,14 @@ button.danger{background:#fff;color:#c0392b;border:1px solid #f5b3b3;border-radi
   <div class="stitle">Réserve trésorerie</div>
   <div class="mg c3">
     <div class="met green"><div class="ml">Réserve calculée</div><div class="mv pos" id="db-rc">—</div><div class="ms">cumulée depuis nov. 2025</div></div>
-    <div class="met blue"><div class="ml">Réserve réelle connue</div><div class="mv" style="color:#185fa5" id="db-rr">—</div><div class="ms" id="db-rr-date">—</div></div>
-    <div class="met"><div class="ml">Écart</div><div class="mv" id="db-ecart">—</div><div class="ms">TVA NDF ~62 €</div></div>
+    <div class="met blue"><div class="ml">Réserve réelle connue</div><div class="mv" style="color:#185fa5" id="db-rr">—</div><div class="ms" id="db-rr-date">point de contrôle manuel</div></div>
+    <div class="met"><div class="ml">Écart calc. vs réel</div><div class="mv" id="db-ecart">—</div><div class="ms" id="db-ecart-sub">—</div></div>
   </div>
 
   <div class="stitle">Revenus cumulés</div>
-  <div class="mg c2">
-    <div class="met green"><div class="ml">Revenu total net reçu</div><div class="mv pos" id="db-rev">—</div></div>
+  <div class="mg c3">
+    <div class="met green"><div class="ml">Total net perçu réel</div><div class="mv pos" id="db-rev">—</div><div class="ms">bulletins + frais remboursés</div></div>
+    <div class="met"><div class="ml">Net bulletins seul</div><div class="mv" id="db-rev-nb">—</div><div class="ms">cumul après PAS</div></div>
     <div class="met"><div class="ml">Équivalent brut CDI / an</div><div class="mv" id="db-cdi">—</div><div class="ms">projection sur 12 mois</div></div>
   </div>
 
@@ -198,6 +199,10 @@ button.danger{background:#fff;color:#c0392b;border:1px solid #f5b3b3;border-radi
       <div class="entry-field"><label>dont carence (auto)</label><input type="number" id="e-car" value="0" min="0" max="3" step="0.5" readonly style="background:#f8f8f7;color:#6b6b6b"></div>
       <div class="entry-field"><label>IJ Sécu estimées (€)</label><input type="number" id="e-ij" value="0" min="0" step="0.01" readonly style="background:#f8f8f7;color:#6b6b6b"></div>
     </div>
+    <div class="entry-grid wide">
+      <div class="entry-field"><label>Net bulletin (€) — "Net payé" du bulletin après PAS</label><input type="number" id="e-nb" value="0" min="0" step="0.01" oninput="updatePreview()"></div>
+      <div class="entry-field"><label>Total net perçu (auto) = Net bulletin + Frais</label><input type="number" id="e-tnp" value="0" readonly style="background:#f0f7f2;color:#1a7a3a;font-weight:600"></div>
+    </div>
     <div id="e-preview" style="margin:12px 0;padding:12px;background:#f8f8f7;border-radius:8px;font-size:13px;display:none"></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="primary" onclick="saveEntry()">↓ Enregistrer ce mois</button>
@@ -205,21 +210,27 @@ button.danger{background:#fff;color:#c0392b;border:1px solid #f5b3b3;border-radi
     </div>
   </div>
 
-  <!-- Historique -->
+  <!-- Historique par année -->
   <div class="stitle">Historique</div>
+  <div style="display:flex;gap:6px;margin-bottom:8px" id="hist-tabs">
+    <button class="sec" id="htab-2025" onclick="swHist(2025)" style="font-size:12px;padding:6px 14px">2025</button>
+    <button class="sec" id="htab-2026" onclick="swHist(2026)" style="font-size:12px;padding:6px 14px;background:#f0f0ee;font-weight:600">2026</button>
+    <button class="sec" id="htab-2027" onclick="swHist(2027)" style="font-size:12px;padding:6px 14px">2027</button>
+  </div>
   <div style="overflow-x:auto">
     <table class="tbl">
       <thead><tr>
         <th style="min-width:72px">Mois</th>
-        <th class="r" style="min-width:55px">J. réels</th>
-        <th class="r" style="min-width:55px">J. fact.</th>
-        <th class="r" style="min-width:60px">Frais €</th>
-        <th class="r" style="min-width:55px">Fériés</th>
-        <th class="r" style="min-width:55px">Congés</th>
-        <th class="r" style="min-width:55px">Maladie</th>
-        <th class="r" style="min-width:88px">Net reçu</th>
-        <th class="r" style="min-width:78px">Δ Réserve</th>
-        <th style="min-width:30px"></th>
+        <th class="r" style="min-width:50px">J. réels</th>
+        <th class="r" style="min-width:50px">J. fact.</th>
+        <th class="r" style="min-width:58px">Frais €</th>
+        <th class="r" style="min-width:45px">Fériés</th>
+        <th class="r" style="min-width:48px">Congés</th>
+        <th class="r" style="min-width:48px">Maladie</th>
+        <th class="r" style="min-width:82px">Net bulletin</th>
+        <th class="r" style="min-width:82px">Total perçu</th>
+        <th class="r" style="min-width:72px">Δ Réserve</th>
+        <th style="min-width:24px"></th>
       </tr></thead>
       <tbody id="su-body"></tbody>
     </table>
@@ -326,16 +337,16 @@ const BL = {
 };
 
 // ─── Données mensuelles pré-remplies
-// jr=jours réels, jf=jours facturés, f=frais, mal=jours maladie
+// jr=jours réels, jf=jours facturés, f=frais remboursés, mal=jours maladie, nb=net bulletin (net payé après PAS)
 const DEFAULT_MD = {
-  '2025-10':{jr:17,   jf:17,   f:790.73, mal:0},
-  '2025-11':{jr:18,   jf:18,   f:312.49, mal:0},
-  '2026-0' :{jr:21,   jf:21,   f:352.05, mal:0},
-  '2026-1' :{jr:18,   jf:18,   f:299.57, mal:0},
-  '2026-2' :{jr:21,   jf:21,   f:697.43, mal:0},
-  '2026-3' :{jr:17,   jf:17,   f:906.93, mal:0},
-  '2026-4' :{jr:12.5, jf:16.5, f:230.00, mal:0},
-  '2026-5' :{jr:0,    jf:-4,   f:0,      mal:0},  // juin : rectification -4j
+  '2025-10':{jr:17,   jf:17,   f:790.73, mal:0, nb:0},
+  '2025-11':{jr:18,   jf:18,   f:312.49, mal:0, nb:0},
+  '2026-0' :{jr:21,   jf:21,   f:352.05, mal:0, nb:0},
+  '2026-1' :{jr:18,   jf:18,   f:299.57, mal:0, nb:0},
+  '2026-2' :{jr:21,   jf:21,   f:697.43, mal:0, nb:0},
+  '2026-3' :{jr:17,   jf:17,   f:906.93, mal:0, nb:0},
+  '2026-4' :{jr:16.5, jf:16.5, f:230.00, mal:0, nb:0},
+  '2026-5' :{jr:13,   jf:13,   f:517.26, mal:0, nb:3527.08},
 };
 
 let MD = {};
@@ -470,18 +481,24 @@ function updatePreview(){
   const jr=+document.getElementById('e-jr').value||0;
   const jf=+document.getElementById('e-jf').value||0;
   const f=+document.getElementById('e-f').value||0;
+  const nb=+document.getElementById('e-nb').value||0;
   const mal=+document.getElementById('e-mal').value||0;
   const ij=calcIJ(mal,p);
-  if(jr===0&&jf===0&&f===0&&mal===0){document.getElementById('e-preview').style.display='none';return;}
+  // Mise à jour total net perçu
+  const tnp=nb+f+ij.total;
+  document.getElementById('e-tnp').value=tnp.toFixed(2);
+  if(jr===0&&jf===0&&f===0&&mal===0&&nb===0){document.getElementById('e-preview').style.display='none';return;}
   const c=cal(jf,f,p);
   const k=`${document.getElementById('ey').value}-${document.getElementById('em').value}`;
   const dr=dRes(k,jf,f,p);
-  const netTotal=c.tot+ij.total;
   document.getElementById('e-preview').style.display='block';
-  document.getElementById('e-preview').innerHTML=
-    `<b>Aperçu :</b> Net reçu estimé <b class="pos">${fm(netTotal)}</b>`+
-    (ij.total>0?` (dont ${fm(ij.total)} IJ Sécu)`:'')+ ` · Δ réserve <b class="${cl(dr)}">${fm(dr,true)}</b>`+
-    (jf!==jr?` · <span class="ora">⚠ ${jf>jr?'Surfa':'Sous-fa'}cturation : ${jf} j facturés vs ${jr} j réels</span>`:'');
+  let prev=`<b>Aperçu :</b>`;
+  if(nb>0) prev+=` Total net perçu <b class="pos">${fm(tnp)}</b> (net bulletin ${fm(nb)} + frais ${fm(f)})`;
+  else prev+=` Net estimé <b class="pos">${fm(c.tot+ij.total)}</b>`;
+  if(ij.total>0) prev+=` <span style="color:#6b6b6b">(dont ${fm(ij.total)} IJ Sécu)</span>`;
+  prev+=` · Δ réserve <b class="${cl(dr)}">${fm(dr,true)}</b>`;
+  if(jf!==jr) prev+=` · <span class="ora">⚠ ${jf>jr?'Surfa':'Sous-fa'}cturation : ${jf} j facturés vs ${jr} j réels</span>`;
+  document.getElementById('e-preview').innerHTML=prev;
 }
 
 function saveEntry(){
@@ -491,8 +508,9 @@ function saveEntry(){
   const jf=+document.getElementById('e-jf').value||0;
   const f=+document.getElementById('e-f').value||0;
   const mal=+document.getElementById('e-mal').value||0;
+  const nb=+document.getElementById('e-nb').value||0;
   const k=`${y}-${m}`;
-  MD[k]={jr,jf,f,mal};
+  MD[k]={jr,jf,f,mal,nb};
   // Met à jour BL si nouveau mois
   if(!BL[k]&&jf>0){
     const p=gP();
@@ -511,6 +529,8 @@ function clearEntry(){
   document.getElementById('e-mal').value=0;
   document.getElementById('e-car').value=0;
   document.getElementById('e-ij').value=0;
+  document.getElementById('e-nb').value=0;
+  document.getElementById('e-tnp').value=0;
   document.getElementById('e-preview').style.display='none';
 }
 
@@ -519,40 +539,86 @@ function deleteEntry(k){
   delete MD[k]; saveMD(); compute();
 }
 
+// ─── Onglet année historique
+let histYear = new Date().getFullYear() <= 2025 ? 2025 : new Date().getFullYear() <= 2026 ? 2026 : 2027;
+function swHist(y){
+  histYear=y;
+  [2025,2026,2027].forEach(yr=>{
+    const btn=document.getElementById('htab-'+yr);
+    if(btn){ btn.style.background=yr===y?'#f0f0ee':'#fff'; btn.style.fontWeight=yr===y?'600':'400'; }
+  });
+  rSuivi();
+}
+
 // ─── Rendu suivi
 function rSuivi(){
   const p=gP();
+  const y=histYear;
   let rows='';
-  [2025,2026,2027].forEach(y=>{
-    rows+=`<tr class="yr"><td colspan="10">${y} — ${fOuvres(y).length} fériés ouvrés</td></tr>`;
-    for(let m=0;m<12;m++){
-      const k=`${y}-${m}`, md=MD[k]||null, has=md!==null;
-      if(!has){rows+=`<tr><td><b>${MS[m]}</b></td><td colspan="8" style="color:#aaa;font-size:11px">—</td><td></td></tr>`;continue;}
-      const jr=md.jr, jf=md.jf, f=md.f, mal=md.mal||0;
-      const fm2=fMois(y,m), jo=jOuvres(y,m);
-      const cg=Math.max(0,jo-fm2-jr-mal);
-      const c=cal(jf,f,p);
-      const ij=calcIJ(mal,p);
-      const netTotal=c.tot+ij.total;
-      const dr=dRes(k,jf,f,p);
-      const isReal=!!BL[k]&&['2025-10','2025-11','2026-0','2026-1','2026-2','2026-3','2026-4'].includes(k);
-      const hasSick=mal>0, hasRect=jf!==jr;
-      const rc=hasSick?'sick':hasRect?'rect':isReal?'real':'';
-      const ind=hasSick?' 🤒':hasRect?' 🔄':isReal?' <span style="color:#1a7a3a;font-size:10px">●</span>':'';
-      rows+=`<tr class="${rc}">
-        <td><b>${MS[m]}</b>${ind}</td>
-        <td class="r">${jr} j</td>
-        <td class="r ${jr!==jf?'ora':''}">${jf} j</td>
-        <td class="r">${f>0?f.toLocaleString('fr-FR')+'\u202f€':'—'}</td>
-        <td class="r">${fm2} j</td>
-        <td class="r">${cg} j</td>
-        <td class="r ${hasSick?'neg':''}">${mal>0?mal+' j':'—'}</td>
-        <td class="r pos">${fm(netTotal)}</td>
-        <td class="r ${cl(dr)}">${fm(dr,true)}</td>
-        <td class="r"><button onclick="deleteEntry('${k}')" style="background:none;border:none;cursor:pointer;color:#c0392b;font-size:14px;padding:0 4px" title="Supprimer">×</button></td>
-      </tr>`;
+  // Résumé de l'année en tête
+  let ytJ=0,ytJf=0,ytRev=0,ytC=0,ytRes=0,ytMal=0,ytCar=0;
+  for(let m=0;m<12;m++){
+    const k=`${y}-${m}`, md=MD[k];
+    if(!md) continue;
+    const jr=md.jr,jf=md.jf,f=md.f,mal=md.mal||0;
+    const fm2=fMois(y,m),jo=jOuvres(y,m);
+    const cg=Math.max(0,jo-fm2-jr-mal);
+    const c=cal(jf,f,p);
+    const ij=calcIJ(mal,p);
+    ytJ+=jr; ytRev+=c.tot+ij.total; ytC+=cg; ytMal+=mal; ytCar+=ij.carence;
+    ytRes+=dRes(k,jf,f,p);
+  }
+  const moisSaisies=[...Array(12).keys()].filter(m=>MD[`${y}-${m}`]).length;
+  let ytNB=0,ytTNP=0;
+  for(let m=0;m<12;m++){
+    const k2=`${y}-${m}`,md2=MD[k2];
+    if(!md2||!md2.nb)continue;
+    ytNB+=md2.nb; ytTNP+=md2.nb+(md2.f||0);
+  }
+  if(moisSaisies>0){
+    rows+=`<tr class="yr">
+      <td colspan="4">${y} · ${moisSaisies} mois · ${ytJ} j travaillés · ${ytC} j congés · ${ytMal>0?ytMal+' j maladie · ':''} ${fOuvres(y).length} fériés</td>
+      <td colspan="6" class="r" style="font-size:11px">${ytTNP>0?`Total perçu : <b class="pos">${fm(ytTNP)}</b> · `:''}Δ réserve : <b class="${cl(ytRes)}">${fm(ytRes,true)}</b></td>
+      <td></td>
+    </tr>`;
+  } else {
+    rows+=`<tr class="yr"><td colspan="11">${y} — aucune donnée</td></tr>`;
+  }
+  for(let m=0;m<12;m++){
+    const k=`${y}-${m}`, md=MD[k]||null, has=md!==null;
+    if(!has){
+      // N'affiche les mois vides que pour les mois passés ou ce mois-ci
+      const now=new Date();
+      if(y<now.getFullYear()||(y===now.getFullYear()&&m<=now.getMonth())){
+        rows+=`<tr><td><b>${MS[m]}</b></td><td colspan="9" style="color:#aaa;font-size:11px">—</td><td></td></tr>`;
+      }
+      continue;
     }
-  });
+    const jr=md.jr, jf=md.jf, f=md.f, mal=md.mal||0, nb=md.nb||0;
+    const fm2=fMois(y,m), jo=jOuvres(y,m);
+    const cg=Math.max(0,jo-fm2-jr-mal);
+    const c=cal(jf,f,p);
+    const ij=calcIJ(mal,p);
+    const dr=dRes(k,jf,f,p);
+    const tnp=nb>0?nb+f+ij.total:0;
+    const isReal=!!BL[k];
+    const hasSick=mal>0, hasRect=jf!==jr;
+    const rc=hasSick?'sick':hasRect?'rect':isReal?'real':'';
+    const ind=hasSick?' 🤒':hasRect?' 🔄':isReal?' <span style="color:#1a7a3a;font-size:10px">●</span>':'';
+    rows+=`<tr class="${rc}">
+      <td><b>${MS[m]}</b>${ind}</td>
+      <td class="r">${jr>0?jr+' j':'—'}</td>
+      <td class="r ${jr!==jf?'ora':''}">${jf} j</td>
+      <td class="r">${f>0?f.toLocaleString('fr-FR')+'\u202f€':'—'}</td>
+      <td class="r">${fm2>0?fm2+' j':'—'}</td>
+      <td class="r">${cg>0?cg+' j':'—'}</td>
+      <td class="r ${hasSick?'neg':''}">${mal>0?mal+' j':'—'}</td>
+      <td class="r">${nb>0?fm(nb):'<span style="color:#aaa;font-size:11px">—</span>'}</td>
+      <td class="r pos">${tnp>0?fm(tnp):'<span style="color:#aaa;font-size:11px">—</span>'}</td>
+      <td class="r ${cl(dr)}">${fm(dr,true)}</td>
+      <td class="r"><button onclick="deleteEntry('${k}')" style="background:none;border:none;cursor:pointer;color:#c0392b;font-size:14px;padding:0 4px" title="Supprimer">×</button></td>
+    </tr>`;
+  }
   document.getElementById('su-body').innerHTML=rows;
 }
 
@@ -562,19 +628,23 @@ function rDashboard(){
   const vj=vjRef(p);
   let totJ=0, totJf=0, totRev=0, totC=0, totF=0, totMal=0, totCar=0, res=0;
 
+  let totNB=0; // cumul net bulletins seul
   [2025,2026,2027].forEach(y=>{
     for(let m=0;m<12;m++){
       const k=`${y}-${m}`, md=MD[k];
       if(!md)continue;
-      const jr=md.jr, jf=md.jf, f=md.f, mal=md.mal||0;
+      const jr=md.jr, jf=md.jf, f=md.f, mal=md.mal||0, nb=md.nb||0;
       const fm2=fMois(y,m), jo=jOuvres(y,m);
       const cg=Math.max(0,jo-fm2-jr-mal);
       const c=cal(jf,f,p);
       const ij=calcIJ(mal,p);
       const dr=dRes(k,jf,f,p);
       res+=dr;
-      totJ+=jr; totJf+=vj>0?(c.tot+ij.total)/vj:0;
-      totRev+=c.tot+ij.total;
+      totJ+=jr;
+      // Revenu réel : net bulletin + frais si bulletin saisi, sinon estimé
+      const rev=nb>0 ? nb+f+ij.total : c.tot+ij.total;
+      totRev+=rev;
+      if(nb>0) totNB+=nb;
       totC+=cg; totF+=fm2; totMal+=mal; totCar+=ij.carence;
     }
   });
@@ -586,13 +656,15 @@ function rDashboard(){
     `jours sans travailler, salaire maintenu · réserve ${fm(res)} · valeur/jour ${fm(vj)}`;
 
   document.getElementById('db-rc').textContent=fm(res);
-  document.getElementById('db-rr').textContent=fm(p.rr);
-  document.getElementById('db-rr-date').textContent=p.rdate?`au ${p.rdate}`:'date non renseignée';
+  document.getElementById('db-rr').textContent=p.rr>0?fm(p.rr):'—';
+  document.getElementById('db-rr-date').textContent=p.rdate?`au ${p.rdate}`:'non renseigné';
   const ec=res-p.rr;
   const ee=document.getElementById('db-ecart');
-  ee.textContent=fm(ec,true); ee.className='mv '+cl(ec);
+  if(p.rr>0){ ee.textContent=fm(ec,true); ee.className='mv '+cl(ec); document.getElementById('db-ecart-sub').textContent=ec>50?'réserve calc. supérieure':ec<-50?'réserve calc. inférieure':'cohérent'; }
+  else { ee.textContent='—'; ee.className='mv mut'; document.getElementById('db-ecart-sub').textContent='renseigner la réserve réelle dans Paramètres'; }
 
   document.getElementById('db-rev').textContent=fm(totRev);
+  document.getElementById('db-rev-nb').textContent=totNB>0?fm(totNB):'—';
   // CDI équiv sur 12 mois glissants
   const moisSaisis=Object.keys(MD).length;
   const cdi=moisSaisis>0?Math.round((totRev/moisSaisis)*12/0.773):0;
@@ -710,6 +782,7 @@ Rules:
     document.getElementById('e-jr').value=parsed.jours_travailles||17;
     document.getElementById('e-jf').value=parsed.jours_travailles||17;
     document.getElementById('e-f').value=(parsed.ndf_virement||0).toFixed(2);
+    document.getElementById('e-nb').value=(parsed.net_paye||0).toFixed(2);
     document.getElementById('e-mal').value=0;
     syncMaladie(); updatePreview();
     // Stocker dans BL
@@ -738,9 +811,69 @@ function fileToB64(file){
 
 // ─── Export/Import
 function expJ(){
-  const data={MD, v:'v8'};
+  const p=gP();
+  const mois_labels=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  // Export lisible : une entrée par mois avec tous les champs nommés
+  const historique=[];
+  [2025,2026,2027].forEach(y=>{
+    for(let m=0;m<12;m++){
+      const k=`${y}-${m}`, md=MD[k];
+      if(!md) continue;
+      const jr=md.jr,jf=md.jf,f=md.f,mal=md.mal||0;
+      const fm2=fMois(y,m),jo=jOuvres(y,m);
+      const cg=Math.max(0,jo-fm2-jr-mal);
+      const c=cal(jf,f,p);
+      const ij=calcIJ(mal,p);
+      const dr=dRes(k,jf,f,p);
+      const bl=BL[k]||null;
+      historique.push({
+        periode:`${mois_labels[m]} ${y}`,
+        annee:y, mois:m+1,
+        jours_travailles_reels:jr,
+        jours_factures:jf,
+        frais_rembourses_eur:f,
+        jours_feries_ouvres:fm2,
+        jours_conges_estimes:cg,
+        jours_maladie:mal,
+        dont_carence:ij.carence,
+        ij_secu_eur:Math.round(ij.total*100)/100,
+        net_recu_calcule_eur:Math.round((c.tot+ij.total)*100)/100,
+        delta_reserve_eur:Math.round(dr*100)/100,
+        // Données bulletin réel si disponibles
+        bulletin_reel: bl ? {
+          facture_ht_eur:bl.fht,
+          commission_eur:bl.cm,
+          cout_global_eur:bl.ct,
+          ndf_bulletin_eur:bl.ndf
+        } : null,
+        type: mal>0?'maladie':jf!==jr?'rectification':bl?'bulletin_reel':'saisi_manuel'
+      });
+    }
+  });
+  const data={
+    export_portage_salarial:{
+      version:'v8',
+      date_export:new Date().toISOString().split('T')[0],
+      consultant:'Julien HOCQ',
+      societe:'Fluent IT',
+      parametres:{
+        tjm_eur:p.tjm,
+        commission_pct:Math.round(p.comm*1000)/10,
+        pas_pct:Math.round(p.pas*1000)/10,
+        jours_cibles_mois:p.jc,
+        objectif_conges_an:p.co
+      },
+      reserve_reelle_connue:{montant_eur:p.rr, date:p.rdate},
+      historique
+    },
+    // Données brutes pour réimport
+    _raw:{MD, v:'v8'}
+  };
   const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='portage_data.json';a.click();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);
+  a.download=`portage_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
 }
 function togImp(){const e=document.getElementById('jimp');e.style.display=e.style.display==='none'?'block':'none';}
 function impJ(){
